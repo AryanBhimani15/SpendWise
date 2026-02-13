@@ -1,0 +1,99 @@
+/* Buttons */
+.btn-primary {
+    background: var(--brown);
+    color: var(--bg);
+    padding: 16px 32px;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.btn-primary:hover {
+    background: var(--text);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background: var(--surface);
+    color: var(--text);
+    padding: 16px 32px;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: 500;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+}
+
+.btn-secondary:hover {
+    border-color: var(--accent);
+    background: var(--bg-warm);
+}
+
+/* Cards */
+.card-chip {
+    width: 28px;
+    height: 20px;
+    background: linear-gradient(135deg, #e6d9a3 0%, #d4af37 50%, #c9a961 100%);
+    border-radius: 4px;
+    position: relative;
+}
+
+.card-chip::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+    height: 50%;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 2px;
+}
+
+/* Badges */
+.badge {
+    font-size: 11px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-bank {
+    background: var(--bg-warm);
+    color: var(--brown);
+}
+
+.badge-type {
+    background: rgba(124, 154, 107, 0.1);
+    color: var(--green);
+}
+
+.badge-fee {
+    background: rgba(196, 92, 74, 0.1);
+    color: var(--red);
+}
+
+/* Reward Pills */
+.reward-pill {
+    font-size: 12px;
+    color: var(--text-light);
+    background: var(--surface);
+    padding: 8px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+}
+
+.reward-pill strong {
+    color: var(--accent-dark);
+}

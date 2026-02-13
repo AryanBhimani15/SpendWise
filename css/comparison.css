@@ -1,0 +1,742 @@
+/* Comparison and ranking specific styles */
+
+.ranking-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.ranking-number {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+}
+
+/* Comparison table styles */
+.comparison-table-wrapper {
+    overflow-x: auto;
+    margin: 32px 0;
+}
+
+.comparison-table {
+    width: 100%;
+    min-width: 800px;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: var(--surface);
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+}
+
+.comparison-table th {
+    background: var(--brown);
+    color: var(--bg);
+    padding: 16px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: sticky;
+    top: 0;
+}
+
+.comparison-table td {
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+.comparison-table tr:last-child td {
+    border-bottom: none;
+}
+
+.comparison-table tr:hover td {
+    background: rgba(212, 165, 116, 0.05);
+}
+
+.comparison-table .card-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.comparison-table .mini-card-visual {
+    width: 60px;
+    height: 40px;
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+
+.comparison-table .reward-highlight {
+    color: var(--green);
+    font-weight: 700;
+}
+
+.comparison-table .fee-highlight {
+    color: var(--red);
+    font-weight: 600;
+}
+
+/* Filter chips */
+.filter-chips {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 32px;
+}
+
+.filter-chip {
+    padding: 10px 20px;
+    border-radius: 24px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-light);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.filter-chip:hover {
+    border-color: var(--accent);
+    color: var(--brown);
+}
+
+.filter-chip.active {
+    background: var(--brown);
+    color: var(--bg);
+    border-color: var(--brown);
+}
+
+/* Salary selector */
+.salary-selector {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin: 32px 0;
+}
+
+.salary-option {
+    padding: 24px;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.salary-option:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
+
+.salary-option.active {
+    border-color: var(--brown);
+    background: rgba(92, 77, 60, 0.05);
+}
+
+.salary-range {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--brown);
+    margin-bottom: 8px;
+}
+
+.salary-label {
+    font-size: 14px;
+    color: var(--text-light);
+}
+
+/* Card recommendation engine */
+.recommendation-engine {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 40px;
+    margin: 40px 0;
+}
+
+.engine-step {
+    display: none;
+}
+
+.engine-step.active {
+    display: block;
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.option-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.option-card {
+    padding: 24px;
+    background: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+}
+
+.option-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.option-card.selected {
+    border-color: var(--brown);
+    background: rgba(92, 77, 60, 0.05);
+}
+
+.option-icon {
+    width: 56px;
+    height: 56px;
+    background: var(--bg-warm);
+    border-radius: 16px;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 16px;
+}
+
+.option-card h4 {
+    font-size: 18px;
+    color: var(--brown);
+    margin-bottom: 8px;
+}
+
+.option-card p {
+    font-size: 14px;
+    color: var(--text-light);
+}
+
+/* Results display */
+.recommendation-result {
+    background: linear-gradient(135deg, rgba(212, 165, 116, 0.1) 0%, rgba(212, 165, 116, 0.05) 100%);
+    border: 2px solid var(--accent);
+    border-radius: 20px;
+    padding: 32px;
+    margin-top: 32px;
+}
+
+.result-card-highlight {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.result-card-visual {
+    width: 200px;
+    height: 120px;
+    border-radius: 12px;
+    flex-shrink: 0;
+}
+
+.result-details h3 {
+    font-size: 28px;
+    color: var(--brown);
+    margin-bottom: 8px;
+}
+
+.result-details p {
+    font-size: 16px;
+    color: var(--text-light);
+}
+
+.why-recommended {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.why-recommended h4 {
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-light);
+    margin-bottom: 12px;
+}
+
+.why-recommended ul {
+    list-style: none;
+}
+
+.why-recommended li {
+    padding: 8px 0;
+    padding-left: 28px;
+    position: relative;
+    color: var(--text);
+}
+
+.why-recommended li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--green);
+    font-weight: 700;
+}
+
+/* Comparison specific layout */
+.compare-hero {
+    padding: 120px 20px 60px;
+    background: var(--bg-warm);
+    text-align: center;
+}
+
+.compare-hero-content h1 {
+    font-size: 48px;
+    color: var(--brown);
+    margin-bottom: 16px;
+}
+
+.compare-hero-content p {
+    font-size: 18px;
+    color: var(--text-light);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.comparison-tool-section {
+    padding: 60px 20px;
+    background: var(--bg);
+}
+
+.comparison-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.card-selector-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    margin-bottom: 40px;
+}
+
+.card-selector-panel h3 {
+    font-size: 24px;
+    color: var(--brown);
+    margin-bottom: 8px;
+}
+
+.selector-hint {
+    color: var(--text-light);
+    margin-bottom: 24px;
+}
+
+.card-selector-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.selector-card {
+    background: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.selector-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
+
+.selector-card.selected {
+    border-color: var(--brown);
+    background: rgba(92, 77, 60, 0.05);
+}
+
+.selector-card-visual {
+    width: 100%;
+    height: 60px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, var(--brown), var(--accent));
+}
+
+.selector-card h4 {
+    font-size: 16px;
+    color: var(--brown);
+    margin-bottom: 4px;
+}
+
+.selector-card p {
+    font-size: 13px;
+    color: var(--text-light);
+    margin-bottom: 8px;
+}
+
+.selector-fee {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--green);
+}
+
+.selected-cards-preview {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.preview-label {
+    font-size: 14px;
+    color: var(--text-light);
+}
+
+.preview-chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.selected-chip {
+    background: var(--brown);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.selected-chip button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+}
+
+.empty-chip {
+    color: var(--text-light);
+    font-size: 13px;
+    font-style: italic;
+}
+
+.btn-full {
+    width: 100%;
+}
+
+.comparison-display {
+    display: none;
+}
+
+.comparison-display.active {
+    display: block;
+}
+
+.comparison-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.comparison-header h2 {
+    font-size: 28px;
+    color: var(--brown);
+}
+
+.comparison-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.comparison-empty {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--text-light);
+}
+
+.empty-icon {
+    margin-bottom: 24px;
+    opacity: 0.5;
+}
+
+.comparison-empty h3 {
+    font-size: 24px;
+    color: var(--brown);
+    margin-bottom: 12px;
+}
+
+.winner-banner {
+    background: linear-gradient(135deg, rgba(212, 165, 116, 0.15), rgba(212, 165, 116, 0.05));
+    border: 2px solid var(--accent);
+    border-radius: 16px;
+    padding: 32px;
+    margin-top: 32px;
+    text-align: center;
+}
+
+.winner-badge {
+    display: inline-block;
+    background: var(--brown);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+}
+
+.winner-content h3 {
+    font-size: 28px;
+    color: var(--brown);
+    margin-bottom: 8px;
+}
+
+.winner-content p {
+    color: var(--text-light);
+    margin-bottom: 20px;
+}
+
+.quick-compare-section {
+    padding: 80px 20px;
+    background: var(--bg-warm);
+}
+
+.quick-compare-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.quick-compare-container h2 {
+    font-size: 32px;
+    color: var(--brown);
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.quick-compare-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+}
+
+.quick-compare-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s;
+}
+
+.quick-compare-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.quick-compare-card h4 {
+    font-size: 18px;
+    color: var(--brown);
+    margin-bottom: 8px;
+}
+
+.quick-compare-card p {
+    font-size: 14px;
+    color: var(--text-light);
+    margin-bottom: 16px;
+}
+
+.quick-compare-link {
+    color: var(--brown);
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.compare-cta-section {
+    padding: 100px 20px;
+    text-align: center;
+    background: var(--bg);
+}
+
+.compare-cta-content h2 {
+    font-size: 36px;
+    color: var(--brown);
+    margin-bottom: 16px;
+}
+
+.compare-cta-content p {
+    font-size: 18px;
+    color: var(--text-light);
+    max-width: 500px;
+    margin: 0 auto 32px;
+}
+
+/* Mobile comparison */
+.mobile-comparison {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .comparison-table-wrapper {
+        display: none;
+    }
+    
+    .mobile-comparison {
+        display: grid;
+        gap: 20px;
+    }
+    
+    .mobile-card-compare {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 24px;
+    }
+    
+    .mobile-card-header h3 {
+        font-size: 20px;
+        color: var(--brown);
+        margin-bottom: 4px;
+    }
+    
+    .mobile-card-bank {
+        font-size: 13px;
+        color: var(--text-light);
+    }
+    
+    .mobile-card-fee {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--green);
+        margin: 16px 0;
+    }
+    
+    .mobile-compare-section {
+        margin: 20px 0;
+        padding-top: 20px;
+        border-top: 1px solid var(--border);
+    }
+    
+    .mobile-compare-section h4 {
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--text-light);
+        margin-bottom: 12px;
+    }
+    
+    .mobile-compare-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        font-size: 14px;
+    }
+    
+    .mobile-compare-row span {
+        color: var(--text-light);
+    }
+    
+    .mobile-compare-row strong {
+        color: var(--brown);
+    }
+}
+
+/* Highlight best values */
+.highlight-best {
+    background: rgba(34, 197, 94, 0.1);
+    color: var(--green);
+    font-weight: 700;
+}
+
+.pros-label {
+    color: var(--green);
+    font-weight: 600;
+}
+
+.cons-label {
+    color: var(--red);
+    font-weight: 600;
+}
+
+.pros-cell ul, .cons-cell ul {
+    list-style: none;
+    padding: 0;
+}
+
+.pros-cell li, .cons-cell li {
+    padding: 4px 0;
+    padding-left: 20px;
+    position: relative;
+    font-size: 13px;
+}
+
+.pros-cell li::before {
+    content: '+';
+    position: absolute;
+    left: 0;
+    color: var(--green);
+    font-weight: 700;
+}
+
+.cons-cell li::before {
+    content: '−';
+    position: absolute;
+    left: 0;
+    color: var(--red);
+    font-weight: 700;
+}
+
+.section-divider td {
+    background: var(--bg-warm);
+    font-weight: 600;
+    color: var(--brown);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 12px;
+}
+
+/* Apply Link Styles */
+.apply-link {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    margin-top: 20px;
+}
+
+.apply-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(212, 165, 116, 0.3);
+}
+
+.winner-banner .btn-primary {
+    margin-top: 16px;
+    display: inline-block;
+}

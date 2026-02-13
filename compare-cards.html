@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compare Credit Cards India 2026 | Side-by-Side Comparison Tool</title>
+    <meta name="description" content="Compare top credit cards side by side. See reward rates, fees, benefits, and eligibility in one view. Find the best card for your needs.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/sections.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/comparison.css">
+    
+    <style>
+        /* Eligibility Modal Styles */
+        .eligibility-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .eligibility-modal.active {
+            display: flex;
+        }
+        
+        .eligibility-box {
+            background: var(--card-bg, #1a1a2e);
+            border: 1px solid var(--border, #333);
+            border-radius: 24px;
+            padding: 40px;
+            width: 100%;
+            max-width: 480px;
+            position: relative;
+            animation: modalSlideIn 0.3s ease;
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: var(--bg-secondary, #252542);
+            color: var(--text-primary, #fff);
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .modal-close:hover {
+            background: var(--accent, #00d084);
+            transform: rotate(90deg);
+        }
+        
+        .eligibility-box h2 {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 28px;
+            margin-bottom: 8px;
+            color: var(--text-primary, #fff);
+        }
+        
+        .modal-subtitle {
+            color: var(--text-secondary, #888);
+            margin-bottom: 32px;
+            font-size: 15px;
+        }
+        
+        .eligibility-box .form-group {
+            margin-bottom: 24px;
+        }
+        
+        .eligibility-box label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary, #888);
+            margin-bottom: 10px;
+        }
+        
+        .eligibility-box input {
+            width: 100%;
+            padding: 16px 20px;
+            background: var(--bg-secondary, #252542);
+            border: 2px solid var(--border, #333);
+            border-radius: 12px;
+            color: var(--text-primary, #fff);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .eligibility-box input:focus {
+            outline: none;
+            border-color: var(--accent, #00d084);
+            background: var(--bg-primary, #0f0f1a);
+        }
+        
+        .eligibility-box input::placeholder {
+            color: var(--text-secondary, #666);
+        }
+        
+        .btn-full {
+            width: 100%;
+            padding: 18px;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+        
+        #eligibilityResult {
+            margin-top: 24px;
+            padding: 20px;
+            border-radius: 12px;
+            display: none;
+        }
+        
+        #eligibilityResult.success {
+            display: block;
+            background: rgba(0, 208, 132, 0.1);
+            border: 1px solid rgba(0, 208, 132, 0.3);
+        }
+        
+        #eligibilityResult.error {
+            display: block;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        .result-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary, #fff);
+        }
+        
+        .result-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        
+        .result-card-tag {
+            padding: 8px 16px;
+            background: var(--accent, #00d084);
+            color: #000;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        /* Toast Notification */
+        #toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--card-bg, #1a1a2e);
+            color: var(--text-primary, #fff);
+            padding: 16px 32px;
+            border-radius: 50px;
+            border: 1px solid var(--border, #333);
+            font-weight: 500;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 2000;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        
+        #toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a class="logo" href="index.html">CardMax</a>
+            <ul class="nav-links">
+                <li><a href="best-credit-cards-india.html">Best Cards</a></li>
+                <li><a href="index.html#calculator">Calculator</a></li>
+                <li><a href="compare-cards.html" class="active">Compare</a></li>
+                <li><a href="credit-card-quiz.html">Quiz</a></li>
+                <li><a href="guides.html">Guides</a></li>
+            </ul>
+            <button class="nav-cta" onclick="window.location.href='index.html#download'">Get the App</button>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="compare-hero">
+        <div class="compare-hero-content">
+            <h1>Compare Credit Cards</h1>
+            <p>Side-by-side comparison of India's top credit cards. See real reward rates, fees, and benefits to make the right choice.</p>
+        </div>
+    </section>
+
+    <!-- Comparison Tool -->
+    <section class="comparison-tool-section">
+        <div class="comparison-container">
+            
+            <!-- Card Selector -->
+            <div class="card-selector-panel">
+                <h3>Select Cards to Compare</h3>
+                <p class="selector-hint">Choose 2-4 cards to see detailed comparison</p>
+                
+                <div class="card-selector-grid" id="cardSelector">
+                    <!-- Populated by JS -->
+                </div>
+                
+                <div class="selected-cards-preview" id="selectedPreview">
+                    <span class="preview-label">Selected:</span>
+                    <div class="preview-chips" id="previewChips"></div>
+                </div>
+                
+                <button class="btn-primary btn-full" onclick="updateComparison()" id="compareBtn" disabled>
+                    Compare Selected Cards
+                </button>
+            </div>
+
+            <!-- Comparison Display -->
+            <div class="comparison-display" id="comparisonDisplay">
+                <div class="comparison-header">
+                    <h2>Comparison Results</h2>
+                    <div class="comparison-actions">
+                        <button class="btn-secondary btn-small" onclick="clearComparison()">
+                            <svg class="icon-svg" style="width: 16px; height: 16px;" viewBox="0 0 24 24">
+                                <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                            </svg>
+                            Clear All
+                        </button>
+                        <button class="btn-secondary btn-small" onclick="window.print()">
+                            <svg class="icon-svg" style="width: 16px; height: 16px;" viewBox="0 0 24 24">
+                                <polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>
+                            </svg>
+                            Print
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Mobile Cards View -->
+                <div class="mobile-comparison" id="mobileComparison">
+                    <!-- Populated by JS for mobile -->
+                </div>
+
+                <!-- Desktop Table View -->
+                <div class="comparison-table-wrapper" id="desktopTable">
+                    <table class="comparison-table" id="comparisonTable">
+                        <thead>
+                            <tr id="tableHeader">
+                                <th>Feature</th>
+                                <!-- Dynamic card columns -->
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <!-- Dynamic rows -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Winner Banner -->
+                <div class="winner-banner" id="winnerBanner" style="display: none;">
+                    <div class="winner-content">
+                        <span class="winner-badge">Best for You</span>
+                        <h3 id="winnerName">HDFC Infinia Metal</h3>
+                        <p id="winnerReason">Highest overall reward value</p>
+                        <button class="btn-primary" onclick="openEligibility()" id="winnerCheckBtn">Check Eligibility</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Empty State -->
+            <div class="comparison-empty" id="emptyState">
+                <div class="empty-icon">
+                    <svg class="icon-svg" style="width: 64px; height: 64px;" viewBox="0 0 24 24">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/>
+                    </svg>
+                </div>
+                <h3>Select cards to compare</h3>
+                <p>Choose 2 or more cards from the panel above to see detailed side-by-side comparison</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Quick Compare Categories -->
+    <section class="quick-compare-section">
+        <div class="quick-compare-container">
+            <h2>Popular Comparisons</h2>
+            <div class="quick-compare-grid">
+                <a href="?cards=hdfc-infinia,axis-atlas" class="quick-compare-card">
+                    <h4>HDFC Infinia vs Axis Atlas</h4>
+                    <p>Premium travel cards face-off</p>
+                    <span class="quick-compare-link">Compare →</span>
+                </a>
+                <a href="?cards=sbi-cashback,hdfc-millennia" class="quick-compare-card">
+                    <h4>SBI Cashback vs HDFC Millennia</h4>
+                    <p>Best online shopping cards</p>
+                    <span class="quick-compare-link">Compare →</span>
+                </a>
+                <a href="?cards=amazon-pay-icici,flipkart-axis" class="quick-compare-card">
+                    <h4>Amazon Pay vs Flipkart Axis</h4>
+                    <p>E-commerce loyalty cards</p>
+                    <span class="quick-compare-link">Compare →</span>
+                </a>
+                <a href="?cards=axis-ace,sbi-cashback" class="quick-compare-card">
+                    <h4>Axis Ace vs SBI Cashback</h4>
+                    <p>Best for bills vs best for shopping</p>
+                    <span class="quick-compare-link">Compare →</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="compare-cta-section">
+        <div class="compare-cta-content">
+            <h2>Still not sure?</h2>
+            <p>Take our 2-minute quiz to get a personalized recommendation based on your spending habits.</p>
+            <a href="credit-card-quiz.html" class="btn-primary btn-large">
+                Take the Quiz
+                <svg class="icon-svg" style="width: 20px; height: 20px;" viewBox="0 0 24 24">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a class="logo" href="index.html">CardMax</a>
+                <p>Find hidden money in your credit card rewards. Privacy-first, always.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Product</h4>
+                <a href="best-credit-cards-india.html">Best Cards</a>
+                <a href="index.html#calculator">Calculator</a>
+                <a href="compare-cards.html">Compare</a>
+                <a href="index.html#download">Download</a>
+            </div>
+            <div class="footer-col">
+                <h4>Resources</h4>
+                <a href="credit-card-quiz.html">Card Quiz</a>
+                <a href="guides.html">Guides</a>
+                <a href="salary-based-cards.html">By Salary</a>
+            </div>
+            <div class="footer-col">
+                <h4>Company</h4>
+                <a href="about.html">About</a>
+                <a href="privacy.html">Privacy</a>
+                <a href="security.html">Security</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 CardMax. Built with privacy in mind.</span>
+            <span>Made with care in India</span>
+        </div>
+    </footer>
+
+    <!-- Eligibility Modal -->
+    <div class="eligibility-modal" id="eligibilityModal">
+        <div class="eligibility-box">
+            <button class="modal-close" onclick="closeEligibility()">&times;</button>
+            <h2>Check Eligibility</h2>
+            <p class="modal-subtitle">Enter your details to see which cards you qualify for</p>
+            
+            <div class="form-group">
+                <label>Age</label>
+                <input id="userAge" type="number" placeholder="e.g., 28" min="18" max="80">
+            </div>
+            
+            <div class="form-group">
+                <label>Annual Income (₹)</label>
+                <input id="userIncome" type="number" placeholder="e.g., 1200000" min="0">
+            </div>
+            
+            <div class="form-group">
+                <label>CIBIL Score</label>
+                <input id="userCibil" type="number" placeholder="e.g., 750" min="300" max="900">
+            </div>
+
+            <button class="btn-primary btn-full" onclick="runEligibility()">Check Now</button>
+
+            <div id="eligibilityResult"></div>
+        </div>
+    </div>
+
+    <div id="toast"></div>
+
+    <script src="js/main.js"></script>
+    <script src="js/compare.js"></script>
+    <script>
+        // Eligibility Modal Functions
+        function openEligibility() {
+            document.getElementById('eligibilityModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeEligibility() {
+            document.getElementById('eligibilityModal').classList.remove('active');
+            document.body.style.overflow = '';
+            // Reset form
+            document.getElementById('userAge').value = '';
+            document.getElementById('userIncome').value = '';
+            document.getElementById('userCibil').value = '';
+            document.getElementById('eligibilityResult').style.display = 'none';
+            document.getElementById('eligibilityResult').className = '';
+        }
+        
+        function runEligibility() {
+            const age = parseInt(document.getElementById('userAge').value);
+            const income = parseInt(document.getElementById('userIncome').value);
+            const cibil = parseInt(document.getElementById('userCibil').value);
+            const resultDiv = document.getElementById('eligibilityResult');
+            
+            // Validation
+            if (!age || !income || !cibil) {
+                showToast('Please fill all fields');
+                return;
+            }
+            
+            if (age < 18 || age > 80) {
+                showToast('Age must be between 18 and 80');
+                return;
+            }
+            
+            if (cibil < 300 || cibil > 900) {
+                showToast('CIBIL score must be between 300 and 900');
+                return;
+            }
+            
+            // Simulate eligibility check
+            const eligibleCards = [];
+            
+            if (income >= 1200000 && cibil >= 750) {
+                eligibleCards.push('HDFC Infinia', 'Axis Magnus', 'SBI Elite');
+            } else if (income >= 600000 && cibil >= 700) {
+                eligibleCards.push('SBI Cashback', 'Axis Ace', 'Amazon Pay ICICI');
+            } else if (income >= 300000 && cibil >= 650) {
+                eligibleCards.push('Flipkart Axis', 'HDFC Millennia');
+            } else {
+                resultDiv.innerHTML = `
+                    <div class="result-title">Limited Options</div>
+                    <p style="color: var(--text-secondary); margin-top: 8px;">Based on your profile, you may qualify for entry-level cards. Consider building your credit score first.</p>
+                `;
+                resultDiv.className = 'error';
+                return;
+            }
+            
+            resultDiv.innerHTML = `
+                <div class="result-title">🎉 You're eligible for these cards:</div>
+                <div class="result-cards">
+                    ${eligibleCards.map(card => `<span class="result-card-tag">${card}</span>`).join('')}
+                </div>
+            `;
+            resultDiv.className = 'success';
+        }
+        
+        // Close modal on outside click
+        document.getElementById('eligibilityModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeEligibility();
+            }
+        });
+        
+        // Close on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeEligibility();
+            }
+        });
+        
+        // Toast function
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

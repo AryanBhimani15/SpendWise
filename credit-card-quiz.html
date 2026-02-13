@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Card Quiz India 2026 | Find Your Perfect Card in 2 Minutes</title>
+    <meta name="description" content="Take our 2-minute credit card quiz to find the best card for your spending habits. Personalized recommendations based on your salary, lifestyle, and goals.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/sections.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/quiz.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a class="logo" href="index.html">CardMax</a>
+            <ul class="nav-links">
+                <li><a href="best-credit-cards-india.html">Best Cards</a></li>
+                <li><a href="index.html#calculator">Calculator</a></li>
+                <li><a href="compare-cards.html">Compare</a></li>
+                <li><a href="credit-card-quiz.html" class="active">Quiz</a></li>
+                <li><a href="guides.html">Guides</a></li>
+            </ul>
+            <button class="nav-cta" onclick="window.location.href='index.html#download'">Get the App</button>
+        </div>
+    </nav>
+
+    <!-- Quiz Hero -->
+    <section class="quiz-hero">
+        <div class="quiz-hero-content">
+            <span class="quiz-badge">2-Minute Assessment</span>
+            <h1>Find Your Perfect Credit Card</h1>
+            <p>Answer 5 simple questions about your spending habits. We'll analyze 50+ cards and recommend the best match for you.</p>
+            
+            <div class="quiz-stats">
+                <div class="quiz-stat">
+                    <span class="quiz-stat-number">50+</span>
+                    <span class="quiz-stat-label">Cards Analyzed</span>
+                </div>
+                <div class="quiz-stat">
+                    <span class="quiz-stat-number">2 min</span>
+                    <span class="quiz-stat-label">Time Required</span>
+                </div>
+                <div class="quiz-stat">
+                    <span class="quiz-stat-number">100%</span>
+                    <span class="quiz-stat-label">Free & Private</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quiz Container -->
+    <section class="quiz-section">
+        <div class="quiz-container">
+            
+            <!-- Progress Bar -->
+            <div class="quiz-progress-container">
+                <div class="quiz-progress-bar" id="quizProgress"></div>
+                <span class="quiz-progress-text">Question <span id="currentQ">1</span> of 5</span>
+            </div>
+
+            <!-- Question 1: Monthly Spend -->
+            <div class="quiz-question active" data-q="1">
+                <h2>How much do you spend per month?</h2>
+                <p class="question-subtitle">Include everything: shopping, bills, dining, travel</p>
+                
+                <div class="option-grid large">
+                    <div class="option-card" onclick="selectOption(1, 'low', this)">
+                        <div class="option-icon">₹</div>
+                        <h4>Under ₹20,000</h4>
+                        <p>Student, first job, or frugal spender</p>
+                    </div>
+                    <div class="option-card" onclick="selectOption(1, 'medium', this)">
+                        <div class="option-icon">₹₹</div>
+                        <h4>₹20,000 – ₹50,000</h4>
+                        <p>Young professional, growing career</p>
+                    </div>
+                    <div class="option-card" onclick="selectOption(1, 'high', this)">
+                        <div class="option-icon">₹₹₹</div>
+                        <h4>₹50,000 – ₹1,00,000</h4>
+                        <p>Established professional, family expenses</p>
+                    </div>
+                    <div class="option-card" onclick="selectOption(1, 'premium', this)">
+                        <div class="option-icon">₹₹₹₹</div>
+                        <h4>₹1,00,000+</h4>
+                        <p>High spender, luxury lifestyle, frequent travel</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 2: Spending Categories -->
+            <div class="quiz-question" data-q="2">
+                <h2>Where do you spend the most?</h2>
+                <p class="question-subtitle">Pick your top spending category</p>
+                
+                <div class="option-grid">
+                    <div class="option-card" onclick="selectOption(2, 'online', this)">
+                        <div class="option-icon">
+                            <svg class="icon-svg" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
+                        </div>
+                        <h4>Online Shopping</h4>
+                        <p>Amazon, Flipkart, Myntra, electronics</p>
+                    </div>
+                    <div class="option-card" onclick="selectOption(2, 'travel', this)">
+                        <div class="option-icon">
+                            <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+                        </div>
+                        <h4>Travel & Hotels</h4>
+                        <p>Flights, vacations, business trips</p>
+                    </div>
+                    <div class="option-card" onclick="selectOption(2, 'food', this)">
+                        <div class="option-icon">
+                            <svg class="icon-svg" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                        </div>
+                        <h4>Dining & Food</h4>
+                        <p>Restaurants, Swiggy, Zomato, groceries</p>
+                    </div>
+                    <div class="option-card" onclick="selectOption(2, 'bills', this)">
+                        <div class="option-icon">
+                            <svg class="icon-svg" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                        </div>
+                        <h4>Bills & Utilities</h4>
+                        <p>Electricity, mobile, rent, subscriptions</p>
+                    </div>
+                    <div class="option-card" onclick="selectOption(2, 'mixed', this)">
+                        <div class="option-icon">
+                            <svg class="icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="12" y1="8" x2="12" y2="16"/></svg>
+                        </div>
+                        <h4>Everything Equal</h4>
+                        <p>No specific category dominates</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 3: Annual Fee Comfort -->
+            <div class="quiz-question" data-q="3">
+                <h2>Are you okay with annual fees?</h2>
+                <p class="question-subtitle">Higher fees often mean higher rewards</p>
+                
+                <div class="option-grid">
+                    <div class="option-card" onclick="selectOption(3, 'free', this)">
+                        <div class="option-icon">🆓</div>
+                        <h4>Lifetime Free Only</h4>
+                        <p>Zero annual fee, forever</p>
+                    </div>
+                    <div class="option-card" onclick="selectOption(3, 'low', this)">
+                        <div class="option-icon">₹999</div>
+                        <h4>Under ₹1,000/year</h4>
+                        <p>Small fee for good rewards</p>
+                    </div>
+                    <div class="option-card" onclick="selectOption(3, 'medium', this)">
+                        <div class="option-icon">₹5,000</div>
+                        <h4>₹1,000 – ₹5,000/year</h4>
+                        <p>Willing to pay for premium benefits</p>
+                    </div>
+                    <div class="option-card" onclick="selectOption(3, 'high', this)">
+                        <div class="option-icon">₹12,500</div>
+                        <h4>₹5,000+ /year</h4>
+                        <p>Maximum rewards matter most</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 4: Credit Card Experience -->
+            <div class="quiz-question" data-q="4">
+                <h2>Is this your first credit card?</h2>
+                <p class="question-subtitle">This affects approval chances and card recommendations</p>
+                
+                <div class="option-grid">
+                    <div class="option-card" onclick="selectOption(4, 'first', this)">
+                        <div class="option-icon">🌱</div>
+                        <h4>First Card Ever</h4>
+                        <p>No credit history yet, need easy approval</p>
+                    </div>
+                    <div class="option-card" onclick="selectOption(4, 'new', this)">
+                        <div class="option-icon">📈</div>
+                        <h4>1-2 Cards Already</h4>
+                        <p>Building credit history, want better rewards</p>
+                    </div>
+                    <div class="option-card" onclick="selectOption(4, 'experienced', this)">
+                        <div class="option-icon">💼</div>
+                        <h4>3+ Cards</h4>
+                        <p>Credit card optimizer, want the best</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 5: Salary/Income -->
+            <div class="quiz-question" data-q="5">
+                <h2>What's your monthly income?</h2>
+                <p class="question-subtitle">Banks use this to determine eligibility</p>
+                
+                <div class="option-grid">
+                    <div class="option-card" onclick="selectOption(5, 'under25k', this)">
+                        <div class="option-icon">💰</div>
+                        <h4>Under ₹25,000</h4>
+                        <p>Entry level, student, part-time</p>
+                    </div>
+                    <div class="option-card" onclick="selectOption(5, '25to50k', this)">
+                        <div class="option-icon">💰💰</div>
+                        <h4>₹25,000 – ₹50,000</h4>
+                        <p>Junior professional, 1-3 years exp</p>
+                    </div>
+                    <div class="option-card" onclick="selectOption(5, '50kto1L', this)">
+                        <div class="option-icon">💰💰💰</div>
+                        <h4>₹50,000 – ₹1,00,000</h4>
+                        <p>Mid-level, stable income</p>
+                    </div>
+                    <div class="option-card" onclick="selectOption(5, 'above1L', this)">
+                        <div class="option-icon">💰💰💰💰</div>
+                        <h4>₹1,00,000+</h4>
+                        <p>Senior professional, business owner</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results -->
+            <div class="quiz-results" id="quizResults">
+                <div class="results-header">
+                    <span class="results-badge">Your Top Match</span>
+                    <h2 id="resultCardName">HDFC Infinia Metal</h2>
+                    <p id="resultCardTagline">Best for high spenders who travel</p>
+                </div>
+
+                <div class="result-card-display">
+                    <div class="result-visual" id="resultVisual">
+                        <div class="cv-bank" id="resultBank">HDFC Bank</div>
+                        <div class="cv-number">•••• 4582</div>
+                        <div class="cv-name" id="resultCardShort">Infinia Metal</div>
+                    </div>
+                    
+                    <div class="result-details">
+                        <div class="result-stats">
+                            <div class="result-stat">
+                                <span class="result-stat-label">Annual Fee</span>
+                                <span class="result-stat-value" id="resultFee">₹12,500</span>
+                            </div>
+                            <div class="result-stat">
+                                <span class="result-stat-label">Best Reward Rate</span>
+                                <span class="result-stat-value" id="resultReward">16%</span>
+                            </div>
+                            <div class="result-stat">
+                                <span class="result-stat-label">Est. Yearly Savings</span>
+                                <span class="result-stat-value" id="resultSavings">₹45,000</span>
+                            </div>
+                        </div>
+
+                        <div class="result-why">
+                            <h4>Why this card is perfect for you:</h4>
+                            <ul id="resultReasons">
+                                <li>High spending matches premium rewards</li>
+                                <li>Travel benefits align with your lifestyle</li>
+                                <li>16% on flights via SmartBuy pays for the fee</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="result-alternatives" id="resultAlternatives">
+                    <h4>Also consider:</h4>
+                    <div class="alt-cards" id="altCards">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+
+                <div class="result-actions">
+                    <button class="btn-primary btn-large" onclick="showToast('Apply link coming soon')">
+                        Check Eligibility
+                        <svg class="icon-svg" style="width: 20px; height: 20px;" viewBox="0 0 24 24">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+                    <button class="btn-secondary btn-large" onclick="window.location.href='compare-cards.html'">
+                        Compare with Other Cards
+                    </button>
+                    <button class="btn-text" onclick="restartQuiz()">
+                        <svg class="icon-svg" style="width: 16px; height: 16px;" viewBox="0 0 24 24">
+                            <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                        </svg>
+                        Retake Quiz
+                    </button>
+                </div>
+
+                <div class="result-cta-box">
+                    <h4>Want to see exactly how much you'll save?</h4>
+                    <p>Upload your statement or use our calculator to get precise numbers based on your actual spending.</p>
+                    <div class="cta-box-buttons">
+                        <a href="index.html#demo" class="btn-primary">
+                            <svg class="icon-svg" style="width: 18px; height: 18px;" viewBox="0 0 24 24">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="17 8 12 3 7 8"/>
+                                <line x1="12" y1="3" x2="12" y2="15"/>
+                            </svg>
+                            Upload Statement
+                        </a>
+                        <a href="index.html#calculator" class="btn-secondary">
+                            Use Calculator
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="quiz-nav" id="quizNav">
+                <button class="btn-nav btn-nav-prev" onclick="prevQuestion()" id="prevBtn" style="visibility: hidden;">
+                    <svg class="icon-svg" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                    Back
+                </button>
+                <button class="btn-nav btn-nav-next" onclick="nextQuestion()" id="nextBtn" disabled>
+                    Next
+                    <svg class="icon-svg" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Why Trust Us -->
+    <section class="trust-section">
+        <div class="trust-container">
+            <h2>Why Trust Our Recommendations?</h2>
+            <div class="trust-grid">
+                <div class="trust-item">
+                    <div class="trust-icon">📊</div>
+                    <h4>Data-Driven</h4>
+                    <p>We analyze 50+ cards using real reward rates, not marketing claims</p>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon">🏦</div>
+                    <h4>Bank Neutral</h4>
+                    <p>We don't partner with banks. Our recommendations are 100% unbiased.</p>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon">🔒</div>
+                    <h4>Privacy First</h4>
+                    <p>Your quiz answers are never stored or shared. Completely anonymous.</p>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon">✅</div>
+                    <h4>Verified by Users</h4>
+                    <p>Recommendations tested by 10,000+ Indians who found their perfect card</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a class="logo" href="index.html">CardMax</a>
+                <p>Find hidden money in your credit card rewards. Privacy-first, always.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Product</h4>
+                <a href="best-credit-cards-india.html">Best Cards</a>
+                <a href="index.html#calculator">Calculator</a>
+                <a href="compare-cards.html">Compare</a>
+                <a href="index.html#download">Download</a>
+            </div>
+            <div class="footer-col">
+                <h4>Resources</h4>
+                <a href="credit-card-quiz.html">Card Quiz</a>
+                <a href="guides.html">Guides</a>
+                <a href="salary-based-cards.html">By Salary</a>
+            </div>
+            <div class="footer-col">
+                <h4>Company</h4>
+                <a href="about.html">About</a>
+                <a href="privacy.html">Privacy</a>
+                <a href="security.html">Security</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 CardMax. Built with privacy in mind.</span>
+            <span>Made with care in India</span>
+        </div>
+    </footer>
+
+    <div id="toast"></div>
+
+    <script src="js/main.js"></script>
+    <script src="js/quiz.js"></script>
+</body>
+</html>
