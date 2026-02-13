@@ -152,8 +152,7 @@ def health_check():
         "message": "CardMax API is running"
     })
 
-# This is the key part for Render.com
 if __name__ == '__main__':
-    # Render provides PORT env variable
+    # Azure sets PORT or defaults to 8000
     port = int(os.environ.get('PORT', 8000))
     app.run(host='0.0.0.0', port=port, debug=False)
