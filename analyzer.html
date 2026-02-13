@@ -230,65 +230,62 @@
             color: var(--brown);
         }
 
-        /* Pie Chart */
+        /* ===== PIE CHART WITH SEGMENTS ===== */
         .pie-chart-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 32px;
+            gap: 24px;
         }
 
         .pie-chart-container {
+            position: relative;
             width: 280px;
             height: 280px;
-            position: relative;
         }
 
         .pie-chart-svg {
             width: 100%;
             height: 100%;
-            transform: rotate(-90deg);
+            overflow: visible;
         }
 
-        .pie-chart-bg {
-            fill: none;
-            stroke: var(--bg-warm);
-            stroke-width: 24;
-        }
-
-        .pie-chart-segment {
-            fill: none;
-            stroke-width: 24;
-            stroke-linecap: round;
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        .pie-segment {
             cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+            transform-origin: center;
         }
 
-        .pie-chart-segment:hover {
-            stroke-width: 28;
-            filter: brightness(1.1);
+        .pie-segment:hover {
+            filter: drop-shadow(0 8px 16px rgba(0,0,0,0.2));
+            transform: scale(1.05);
+            z-index: 10;
         }
 
-        .pie-center-circle {
+        /* Center circle with total */
+        .pie-center {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 160px;
-            height: 160px;
+            width: 140px;
+            height: 140px;
             background: var(--surface);
             border-radius: 50%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05), 0 4px 12px rgba(0,0,0,0.08);
-            border: 1px solid var(--border);
+            box-shadow: inset 0 2px 8px rgba(0,0,0,0.05), 0 4px 20px rgba(0,0,0,0.1);
+            border: 2px solid var(--border);
+            pointer-events: none;
+            z-index: 5;
         }
 
         .pie-center-value {
             font-family: 'DM Sans', sans-serif;
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 700;
             color: var(--brown);
             line-height: 1;
@@ -302,15 +299,60 @@
             letter-spacing: 1px;
         }
 
+        /* Tooltip */
+        .pie-tooltip {
+            position: absolute;
+            background: var(--brown);
+            color: var(--bg);
+            padding: 12px 18px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 500;
+            pointer-events: none;
+            opacity: 0;
+            transform: translateY(10px) scale(0.95);
+            transition: all 0.2s ease;
+            z-index: 100;
+            white-space: nowrap;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .pie-tooltip.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .pie-tooltip::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-top: 6px solid var(--brown);
+        }
+
+        .pie-tooltip strong {
+            display: block;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .pie-tooltip span {
+            opacity: 0.9;
+        }
+
+        /* Legend */
         .pie-legend {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 12px;
+            gap: 10px;
             max-width: 100%;
         }
 
-        .pie-legend-item {
+        .legend-item {
             display: flex;
             align-items: center;
             gap: 8px;
@@ -322,30 +364,32 @@
             cursor: pointer;
         }
 
-        .pie-legend-item:hover {
+        .legend-item:hover {
             background: var(--surface);
             border-color: var(--accent);
+            transform: translateY(-2px);
         }
 
-        .pie-legend-color {
+        .legend-color {
             width: 12px;
             height: 12px;
             border-radius: 3px;
+            flex-shrink: 0;
         }
 
-        .pie-legend-text {
+        .legend-text {
             display: flex;
             flex-direction: column;
             gap: 1px;
         }
 
-        .pie-legend-label {
+        .legend-label {
             font-size: 12px;
             font-weight: 600;
             color: var(--brown);
         }
 
-        .pie-legend-percent {
+        .legend-percent {
             font-size: 11px;
             color: var(--text-light);
         }
@@ -692,32 +736,19 @@
 
         /* Responsive */
         @media (max-width: 1024px) {
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .charts-grid {
-                grid-template-columns: 1fr;
-            }
-            .recommendation-cards {
-                grid-template-columns: 1fr;
-            }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .charts-grid { grid-template-columns: 1fr; }
+            .recommendation-cards { grid-template-columns: 1fr; }
         }
 
         @media (max-width: 768px) {
-            .dashboard-header h1 {
-                font-size: 32px;
-            }
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-            .nav-links {
-                display: none;
-            }
-            .table-header,
-            .table-row {
-                grid-template-columns: 1fr;
-                gap: 8px;
-            }
+            .dashboard-header h1 { font-size: 32px; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
+            .table-header, .table-row { grid-template-columns: 1fr; gap: 8px; }
+            .pie-chart-container { width: 240px; height: 240px; }
+            .pie-center { width: 100px; height: 100px; }
+            .pie-center-value { font-size: 16px; }
         }
 
         /* Loading State */
@@ -752,7 +783,6 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Hidden initially */
         .dashboard-content {
             display: none;
         }
@@ -866,42 +896,17 @@
                     </div>
                     <div class="pie-chart-wrapper">
                         <div class="pie-chart-container" id="pieContainer">
-                            <svg class="pie-chart-svg" viewBox="0 0 100 100">
-                                <circle class="pie-chart-bg" cx="50" cy="50" r="38"/>
-                                <circle class="pie-chart-segment" id="pieSegment1" cx="50" cy="50" r="38" 
-                                    stroke="url(#gradient1)" stroke-dasharray="0 238.76" stroke-dashoffset="0"/>
-                                <circle class="pie-chart-segment" id="pieSegment2" cx="50" cy="50" r="38" 
-                                    stroke="url(#gradient2)" stroke-dasharray="0 238.76" stroke-dashoffset="0"/>
-                                <circle class="pie-chart-segment" id="pieSegment3" cx="50" cy="50" r="38" 
-                                    stroke="url(#gradient3)" stroke-dasharray="0 238.76" stroke-dashoffset="0"/>
-                                <circle class="pie-chart-segment" id="pieSegment4" cx="50" cy="50" r="38" 
-                                    stroke="url(#gradient4)" stroke-dasharray="0 238.76" stroke-dashoffset="0"/>
-                                <defs>
-                                    <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" style="stop-color:#d4a574"/>
-                                        <stop offset="100%" style="stop-color:#b8935f"/>
-                                    </linearGradient>
-                                    <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" style="stop-color:#7c9a6b"/>
-                                        <stop offset="100%" style="stop-color:#5a7a4a"/>
-                                    </linearGradient>
-                                    <linearGradient id="gradient3" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" style="stop-color:#8b7aa8"/>
-                                        <stop offset="100%" style="stop-color:#6b5a88"/>
-                                    </linearGradient>
-                                    <linearGradient id="gradient4" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" style="stop-color:#c45c4a"/>
-                                        <stop offset="100%" style="stop-color:#a43c2a"/>
-                                    </linearGradient>
-                                </defs>
+                            <svg class="pie-chart-svg" viewBox="0 0 100 100" id="pieSvg">
+                                <!-- Segments will be generated by JS -->
                             </svg>
-                            <div class="pie-center-circle">
+                            <div class="pie-center">
                                 <div class="pie-center-value" id="pieCenterValue">₹0</div>
                                 <div class="pie-center-label">Total Spent</div>
                             </div>
+                            <div class="pie-tooltip" id="pieTooltip"></div>
                         </div>
                         <div class="pie-legend" id="pieLegend">
-                            <!-- Legend items will be inserted here -->
+                            <!-- Legend items will be generated by JS -->
                         </div>
                     </div>
                 </div>
@@ -1016,54 +1021,122 @@
             run();
         }
 
-        // Animate pie chart
-        function animatePieChart(categories) {
+        // ===== PIE CHART WITH SEGMENTS =====
+        function createPieChart(categories) {
             if (!categories || Object.keys(categories).length === 0) return;
 
             // Filter and sort categories
             const sorted = Object.entries(categories)
                 .filter(([cat, amount]) => amount > 100 && cat !== 'CASHBACK')
                 .sort((a, b) => b[1] - a[1])
-                .slice(0, 4);
+                .slice(0, 5);
 
             if (sorted.length === 0) return;
 
             const total = sorted.reduce((sum, [, amount]) => sum + amount, 0);
-            const colors = ['#d4a574', '#7c9a6b', '#8b7aa8', '#c45c4a'];
-            const circumference = 2 * Math.PI * 38;
+            const colors = ['#d4a574', '#7c9a6b', '#8b7aa8', '#c45c4a', '#5c4d3c'];
 
-            let accumulated = 0;
+            const svg = document.getElementById('pieSvg');
+            const tooltip = document.getElementById('pieTooltip');
+            const legend = document.getElementById('pieLegend');
+
+            // Clear existing
+            svg.innerHTML = '';
+            legend.innerHTML = '';
+
+            let currentAngle = 0;
+            const centerX = 50;
+            const centerY = 50;
+            const radius = 40;
 
             sorted.forEach(([category, amount], i) => {
                 const percentage = (amount / total) * 100;
-                const dashArray = (percentage / 100) * circumference;
-                const offset = -((accumulated / 100) * circumference);
+                const angle = (amount / total) * 360;
+                const color = colors[i % colors.length];
+
+                // Calculate segment path
+                const startAngle = (currentAngle - 90) * Math.PI / 180;
+                const endAngle = (currentAngle + angle - 90) * Math.PI / 180;
+
+                const x1 = centerX + radius * Math.cos(startAngle);
+                const y1 = centerY + radius * Math.sin(startAngle);
+                const x2 = centerX + radius * Math.cos(endAngle);
+                const y2 = centerY + radius * Math.sin(endAngle);
+
+                const largeArc = angle > 180 ? 1 : 0;
+
+                // Create path for segment
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                const d = `M ${centerX} ${centerY} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2} Z`;
+
+                path.setAttribute('d', d);
+                path.setAttribute('fill', color);
+                path.setAttribute('stroke', 'white');
+                path.setAttribute('stroke-width', '2');
+                path.classList.add('pie-segment');
+
+                // Hover events
+                path.addEventListener('mouseenter', (e) => {
+                    const rect = svg.getBoundingClientRect();
+                    const containerRect = document.getElementById('pieContainer').getBoundingClientRect();
+
+                    tooltip.innerHTML = `
+                        <strong>${category.replace(/_/g, ' ')}</strong>
+                        <span>${percentage.toFixed(1)}% · ${formatCurrency(amount)}</span>
+                    `;
+
+                    // Position tooltip above segment
+                    const midAngle = (currentAngle + angle / 2 - 90) * Math.PI / 180;
+                    const tooltipRadius = radius * 0.7;
+                    const tooltipX = 50 + (tooltipRadius * Math.cos(midAngle) / 100 * 280);
+                    const tooltipY = 50 + (tooltipRadius * Math.sin(midAngle) / 100 * 280);
+
+                    tooltip.style.left = tooltipX + 'px';
+                    tooltip.style.top = (tooltipY - 40) + 'px';
+                    tooltip.classList.add('show');
+                });
+
+                path.addEventListener('mouseleave', () => {
+                    tooltip.classList.remove('show');
+                });
+
+                // Animate in
+                path.style.opacity = '0';
+                path.style.transform = 'scale(0.8)';
+                svg.appendChild(path);
 
                 setTimeout(() => {
-                    const segment = document.getElementById(`pieSegment${i + 1}`);
-                    if (segment) {
-                        segment.style.strokeDasharray = `${dashArray} ${circumference}`;
-                        segment.style.strokeDashoffset = offset;
-                    }
-                }, i * 200);
+                    path.style.transition = 'all 0.5s cubic-bezier(0.23, 1, 0.32, 1)';
+                    path.style.opacity = '1';
+                    path.style.transform = 'scale(1)';
+                }, i * 100);
 
-                accumulated += percentage;
-            });
-
-            // Build legend
-            const legend = document.getElementById('pieLegend');
-            legend.innerHTML = sorted.map(([category, amount], i) => {
-                const percentage = ((amount / total) * 100).toFixed(1);
-                return `
-                    <div class="pie-legend-item">
-                        <div class="pie-legend-color" style="background: ${colors[i]}"></div>
-                        <div class="pie-legend-text">
-                            <span class="pie-legend-label">${category.replace(/_/g, ' ')}</span>
-                            <span class="pie-legend-percent">${percentage}% · ${formatCurrency(amount)}</span>
-                        </div>
+                // Add to legend
+                const legendItem = document.createElement('div');
+                legendItem.className = 'legend-item';
+                legendItem.innerHTML = `
+                    <div class="legend-color" style="background: ${color}"></div>
+                    <div class="legend-text">
+                        <span class="legend-label">${category.replace(/_/g, ' ')}</span>
+                        <span class="legend-percent">${percentage.toFixed(1)}% · ${formatCurrency(amount)}</span>
                     </div>
                 `;
-            }).join('');
+
+                // Legend hover highlights segment
+                legendItem.addEventListener('mouseenter', () => {
+                    path.style.transform = 'scale(1.05)';
+                    path.style.filter = 'drop-shadow(0 8px 16px rgba(0,0,0,0.2))';
+                });
+
+                legendItem.addEventListener('mouseleave', () => {
+                    path.style.transform = 'scale(1)';
+                    path.style.filter = 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))';
+                });
+
+                legend.appendChild(legendItem);
+
+                currentAngle += angle;
+            });
         }
 
         // Animate bar chart
@@ -1110,7 +1183,6 @@
                 const analysis = JSON.parse(data);
                 console.log('Loading analysis:', analysis);
 
-                // Hide loading, show dashboard
                 document.getElementById('loadingOverlay').classList.add('hidden');
                 document.getElementById('dashboardContent').classList.add('active');
 
@@ -1119,9 +1191,8 @@
                 const transactions = analysis.transactions || [];
                 const bestCards = analysis.best_cards || [];
 
-                // Calculate missed rewards (simplified)
                 const totalSpend = totals.total_spend || 0;
-                const missedRewards = totalSpend * 0.02; // Assume 2% missed
+                const missedRewards = totalSpend * 0.02;
                 const annualSavings = missedRewards * 12;
 
                 // Update stats
@@ -1133,8 +1204,10 @@
                 // Update pie center
                 document.getElementById('pieCenterValue').textContent = formatCurrency(totalSpend);
 
-                // Animate charts
-                setTimeout(() => animatePieChart(categoryTotals), 500);
+                // Create pie chart with segments
+                setTimeout(() => createPieChart(categoryTotals), 500);
+
+                // Animate bar chart
                 setTimeout(() => animateBarChart(), 800);
 
                 // Render recommendations

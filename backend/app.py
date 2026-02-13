@@ -18,10 +18,10 @@ from rewards_engine import calculate_rewards, find_best_cards
 
 app = Flask(__name__, static_folder=PROJECT_DIR, static_url_path='')
 
-# Enable CORS for all origins during development
+# Production CORS - restrict to your actual domains in production
 CORS(app, resources={
     r"/api/*": {
-        "origins": "*",
+        "origins": ["https://yourdomain.com", "https://www.yourdomain.com", "http://localhost:8000"],
         "methods": ["GET", "POST", "OPTIONS"],
         "allow_headers": ["Content-Type", "Authorization"]
     }
@@ -152,15 +152,8 @@ def health_check():
         "message": "CardMax API is running"
     })
 
+# This is the key part for Render.com
 if __name__ == '__main__':
-    print("="*60)
-    print("CardMax - Credit Card Rewards Optimizer")
-    print("="*60)
-    print(f"Server: http://localhost:8000")
-    print(f"Project: {PROJECT_DIR}")
-    print("="*60)
-    print("API Endpoints:")
-    print("  POST /api/analyze - Upload and analyze statement")
-    print("  GET  /api/health  - Health check")
-    print("="*60)
-    app.run(host='0.0.0.0', port=8000, debug=True)
+    # Render provides PORT env variable
+    port = int(os.environ.get('PORT', 8000))
+    app.run(host='0.0.0.0', port=port, debug=False)
