@@ -240,6 +240,7 @@
         .dashboard-header {
             text-align: center;
             margin-bottom: 48px;
+            position: relative;
         }
 
         .trust-badge {
@@ -273,6 +274,43 @@
         .dashboard-header p {
             font-size: 18px;
             color: var(--text-light);
+        }
+
+        /* Dashboard Header Actions */
+        .dashboard-header-actions {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+        .btn-reset {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: var(--brown);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .btn-reset:hover {
+            background: var(--accent);
+            color: var(--brown);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-header-actions {
+                position: static;
+                margin-top: 20px;
+            }
         }
 
         /* Stats Grid */
@@ -349,7 +387,6 @@
             font-size: 20px;
             color: var(--brown);
         }
-        
 
         /* Pie Chart */
         .pie-chart-wrapper {
@@ -786,7 +823,7 @@
                 <li><a href="compare-cards.html">Compare</a></li>
                 <li><a href="credit-card-quiz.html">Quiz</a></li>
             </ul>
-            <button class="nav-cta" onclick="location.reload()">Analyze New</button>
+            <button class="nav-cta" onclick="resetAnalysis()">Analyze New</button>
         </div>
     </nav>
 
@@ -860,6 +897,15 @@
     <div class="dashboard-main" id="dashboardMain">
         <!-- Header -->
         <div class="dashboard-header">
+            <div class="dashboard-header-actions">
+                <button class="btn-reset" onclick="resetAnalysis()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 4 23 10 17 10"></polyline>
+                        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                    </svg>
+                    Analyze New
+                </button>
+            </div>
             <div class="trust-badge">Analysis Complete</div>
             <h1>Your Spending Dashboard</h1>
             <p>Here's what we found in your statement and how you can optimize</p>
@@ -1023,6 +1069,73 @@
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
+        // RESET ANALYSIS FUNCTION - This is what was missing!
+        function resetAnalysis() {
+            // Clear localStorage
+            localStorage.removeItem('cardmax_analysis');
+            localStorage.removeItem('cardmax_selected_card');
+            
+            // Reset UI state
+            selectedCardId = null;
+            
+            // Hide dashboard
+            document.getElementById('dashboardMain').classList.remove('active');
+            document.getElementById('dashboardMain').style.display = 'none';
+            
+            // Show upload section
+            document.getElementById('uploadSection').style.display = 'flex';
+            
+            // Reset card selection
+            document.querySelectorAll('.card-select').forEach(el => el.classList.remove('selected'));
+            
+            // Hide upload zone
+            document.getElementById('uploadZone').classList.remove('active');
+            
+            // Reset upload zone content
+            document.getElementById('uploadZone').innerHTML = `
+                <div class="upload-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="17 8 12 3 7 8"/>
+                        <line x1="12" y1="3" x2="12" y2="15"/>
+                    </svg>
+                </div>
+                <div class="upload-text">Drop your statement here</div>
+                <div class="upload-subtitle">or click to browse (PDF, CSV, Excel)</div>
+            `;
+            
+            // Clear stats
+            document.getElementById('statTotal').textContent = '₹0';
+            document.getElementById('statMissed').textContent = '₹0';
+            document.getElementById('statSavings').textContent = '₹0';
+            document.getElementById('statTxns').textContent = '0';
+            document.getElementById('pieCenterValue').textContent = '₹0';
+            
+            // Clear charts
+            document.getElementById('pieSvg').innerHTML = '';
+            document.getElementById('pieLegend').innerHTML = '';
+            
+            // Reset bar chart
+            for (let i = 1; i <= 6; i++) {
+                const fill = document.getElementById('barFill' + i);
+                const val = document.getElementById('barVal' + i);
+                if (fill) fill.style.height = '0%';
+                if (val) {
+                    val.textContent = '₹0';
+                    val.classList.remove('show');
+                }
+            }
+            
+            // Clear recommendations and transactions
+            document.getElementById('recommendationCards').innerHTML = '';
+            document.getElementById('transactionsList').innerHTML = '';
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            showToast('Ready for new analysis');
+        }
+
         // Card selection
         let selectedCardId = null;
 
@@ -1160,6 +1273,7 @@
         function showDashboard(data) {
             // Hide upload, show dashboard
             document.getElementById('uploadSection').style.display = 'none';
+            document.getElementById('dashboardMain').style.display = 'block';
             document.getElementById('dashboardMain').classList.add('active');
 
             const totals = data.totals || {};
@@ -1191,6 +1305,9 @@
 
             // Render transactions
             renderTransactions(transactions);
+            
+            // Scroll to dashboard
+            document.getElementById('dashboardMain').scrollIntoView({ behavior: 'smooth' });
         }
 
         // Create pie chart with segments
