@@ -3,123 +3,288 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analysis Dashboard - CardMax</title>
+    <title>Analyze Statement - CardMax</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,1000&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/sections.css">
+    <link rel="stylesheet" href="css/animations.css">
     <style>
-        :root {
-            --bg: #faf8f5;
-            --bg-warm: #f5f1eb;
-            --surface: #ffffff;
-            --text: #2c2c2c;
-            --text-light: #6b6b6b;
-            --accent: #d4a574;
-            --accent-dark: #b8935f;
-            --brown: #5c4d3c;
-            --border: #e8e4df;
-            --shadow: rgba(0, 0, 0, 0.04);
-            --green: #7c9a6b;
-            --red: #c45c4a;
-            --purple: #8b7aa8;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-        }
-
-        h1, h2, h3, h4 {
-            font-family: 'DM Sans', sans-serif;
-            font-weight: 500;
-            letter-spacing: -0.02em;
-        }
-
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            padding: 20px 5%;
-            background: rgba(250, 248, 245, 0.9);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid transparent;
-        }
-
-        nav.scrolled {
-            border-bottom-color: var(--border);
-        }
-
-        .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
+        /* Upload Section Styles */
+        .upload-section {
+            padding: 140px 5% 100px;
+            background: var(--bg-warm);
+            min-height: 70vh;
             display: flex;
-            justify-content: space-between;
             align-items: center;
         }
 
-        .logo {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 24px;
-            font-weight: 600;
+        .upload-container {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+            width: 100%;
+        }
+
+        .upload-container h2 {
+            font-size: 42px;
             color: var(--brown);
-            text-decoration: none;
+            margin-bottom: 16px;
+            font-family: 'DM Sans', sans-serif;
         }
 
-        .nav-links {
-            display: flex;
-            gap: 40px;
-            list-style: none;
-        }
-
-        .nav-links a {
+        .upload-container > p {
+            font-size: 18px;
             color: var(--text-light);
-            text-decoration: none;
-            font-size: 15px;
-            font-weight: 500;
-            transition: color 0.2s;
+            margin-bottom: 48px;
+            line-height: 1.6;
         }
 
-        .nav-links a:hover {
-            color: var(--text);
+        /* Card Selection Grid */
+        .card-selection {
+            margin-bottom: 40px;
         }
 
-        .nav-cta {
-            background: var(--brown);
-            color: var(--bg);
-            padding: 12px 24px;
-            border-radius: 24px;
-            font-size: 14px;
-            font-weight: 500;
-            border: none;
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .card-select {
+            padding: 20px;
+            background: var(--surface);
+            border: 2px solid var(--border);
+            border-radius: 12px;
             cursor: pointer;
             transition: all 0.3s;
+            text-align: left;
+            position: relative;
         }
 
-        .nav-cta:hover {
-            background: var(--text);
+        .card-select:hover {
+            border-color: var(--accent);
             transform: translateY(-2px);
         }
 
-        /* Main Dashboard */
+        .card-select.selected {
+            border-color: var(--brown);
+            background: rgba(92, 77, 60, 0.05);
+        }
+
+        .card-select-check {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 24px;
+            height: 24px;
+            background: var(--brown);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s;
+        }
+
+        .card-select.selected .card-select-check {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .card-select-bank {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-light);
+            margin-bottom: 4px;
+        }
+
+        .card-select-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--brown);
+            margin-bottom: 4px;
+        }
+
+        .card-select-fee {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        /* Upload Zone */
+        .upload-zone {
+            border: 3px dashed var(--border);
+            border-radius: 28px;
+            padding: 60px 40px;
+            background: var(--surface);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            display: none; /* Hidden until card selected */
+        }
+
+        .upload-zone.active {
+            display: block;
+        }
+
+        .upload-zone::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .upload-zone:hover,
+        .upload-zone.dragover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+
+        .upload-zone:hover::before,
+        .upload-zone.dragover::before {
+            opacity: 1;
+        }
+
+        .upload-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--bg-warm);
+            border-radius: 20px;
+            display: grid;
+            place-items: center;
+            margin: 0 auto 24px;
+            color: var(--brown);
+            transition: all 0.3s;
+        }
+
+        .upload-zone:hover .upload-icon {
+            background: var(--accent);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .upload-icon svg {
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+            width: 32px;
+            height: 32px;
+        }
+
+        .upload-text {
+            font-size: 20px;
+            color: var(--brown);
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .upload-subtitle {
+            font-size: 15px;
+            color: var(--text-light);
+        }
+
+        /* Loading State */
+        .upload-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .spinner {
+            width: 48px;
+            height: 48px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Dashboard Styles (FROM OLD ANALYZER.HTML) */
+    
         .dashboard-main {
+            display: none;
             padding: 120px 5% 60px;
             max-width: 1400px;
             margin: 0 auto;
         }
 
+        .dashboard-main.active {
+            display: block;
+            animation: fadeIn 0.6s ease;
+        }
+        
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .dashboard-header {
             text-align: center;
             margin-bottom: 48px;
+            position: relative;
+        }
+
+        .dashboard-header-actions {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+        .btn-reset {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: var(--brown);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .btn-reset:hover {
+            background: var(--accent);
+            color: var(--brown);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .btn-reset svg {
+            width: 16px;
+            height: 16px;
+            stroke: currentColor;
+            stroke-width: 2;
+            fill: none;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-header-actions {
+                position: static;
+                margin-top: 20px;
+            }
         }
 
         .trust-badge {
@@ -203,7 +368,7 @@
         .stat-change.positive { color: var(--green); }
         .stat-change.negative { color: var(--red); }
 
-        /* Charts Section */
+        /* Charts Grid */
         .charts-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -229,8 +394,9 @@
             font-size: 20px;
             color: var(--brown);
         }
+        
 
-        /* ===== PIE CHART WITH SEGMENTS ===== */
+        /* Pie Chart */
         .pie-chart-wrapper {
             display: flex;
             flex-direction: column;
@@ -263,7 +429,6 @@
             z-index: 10;
         }
 
-        /* Center circle with total */
         .pie-center {
             position: absolute;
             top: 50%;
@@ -299,7 +464,6 @@
             letter-spacing: 1px;
         }
 
-        /* Tooltip */
         .pie-tooltip {
             position: absolute;
             background: var(--brown);
@@ -322,28 +486,6 @@
             transform: translateY(0) scale(1);
         }
 
-        .pie-tooltip::after {
-            content: '';
-            position: absolute;
-            bottom: -6px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-left: 6px solid transparent;
-            border-right: 6px solid transparent;
-            border-top: 6px solid var(--brown);
-        }
-
-        .pie-tooltip strong {
-            display: block;
-            font-size: 14px;
-            margin-bottom: 2px;
-        }
-
-        .pie-tooltip span {
-            opacity: 0.9;
-        }
-
-        /* Legend */
         .pie-legend {
             display: flex;
             flex-wrap: wrap;
@@ -452,7 +594,7 @@
             font-weight: 500;
         }
 
-        /* Recommendations Section */
+        /* Recommendations */
         .recommendations-section {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -662,142 +804,21 @@
             color: var(--brown);
         }
 
-        /* No Data State */
-        .no-data-state {
-            text-align: center;
-            padding: 80px 20px;
-        }
-
-        .no-data-icon {
-            width: 80px;
-            height: 80px;
-            background: var(--bg-warm);
-            border-radius: 24px;
-            display: grid;
-            place-items: center;
-            margin: 0 auto 24px;
-            font-size: 36px;
-        }
-
-        .no-data-state h2 {
-            font-size: 28px;
-            color: var(--brown);
-            margin-bottom: 12px;
-        }
-
-        .no-data-state p {
-            font-size: 16px;
-            color: var(--text-light);
-            margin-bottom: 24px;
-        }
-
-        .btn-primary {
-            background: var(--brown);
-            color: var(--bg);
-            padding: 16px 32px;
-            border-radius: 30px;
-            font-size: 16px;
-            font-weight: 500;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            text-decoration: none;
-        }
-
-        .btn-primary:hover {
-            background: var(--text);
-            transform: translateY(-2px);
-        }
-
-        /* Toast */
-        #toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: var(--brown);
-            color: var(--bg);
-            padding: 16px 32px;
-            border-radius: 12px;
-            font-weight: 500;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-            opacity: 0;
-            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-            z-index: 5000;
-        }
-
-        #toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
         /* Responsive */
         @media (max-width: 1024px) {
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
             .charts-grid { grid-template-columns: 1fr; }
             .recommendation-cards { grid-template-columns: 1fr; }
+            .card-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
         @media (max-width: 768px) {
             .dashboard-header h1 { font-size: 32px; }
             .stats-grid { grid-template-columns: 1fr; }
-            .nav-links { display: none; }
+            .card-grid { grid-template-columns: 1fr; }
             .table-header, .table-row { grid-template-columns: 1fr; gap: 8px; }
-            .pie-chart-container { width: 240px; height: 240px; }
-            .pie-center { width: 100px; height: 100px; }
-            .pie-center-value { font-size: 16px; }
-        }
-
-        /* Loading State */
-        .loading-overlay {
-            position: fixed;
-            inset: 0;
-            background: var(--bg);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            transition: opacity 0.5s;
-        }
-
-        .loading-overlay.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .spinner {
-            width: 48px;
-            height: 48px;
-            border: 3px solid var(--border);
-            border-top-color: var(--accent);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .dashboard-content {
-            display: none;
-        }
-
-        .dashboard-content.active {
-            display: block;
-            animation: fadeIn 0.6s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
         }
     </style>
-<base target="_blank">
 </head>
 <body>
     <!-- Navigation -->
@@ -810,173 +831,227 @@
                 <li><a href="compare-cards.html">Compare</a></li>
                 <li><a href="credit-card-quiz.html">Quiz</a></li>
             </ul>
-            <button class="nav-cta" onclick="window.location.href='analyzer.html'">Analyze New</button>
+            <button class="nav-cta" onclick="resetAnalysis()">Analyze New</button>
         </div>
     </nav>
 
-    <!-- Loading State -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="spinner"></div>
-        <p style="color: var(--text-light);">Loading your analysis...</p>
-    </div>
-
-    <!-- No Data State -->
-    <div class="no-data-state" id="noDataState" style="display: none; padding-top: 140px;">
-        <div class="no-data-icon">📄</div>
-        <h2>No Statement Analyzed Yet</h2>
-        <p>Upload your credit card statement to see your spending breakdown<br>and find hidden rewards.</p>
-        <button class="btn-primary" onclick="window.location.href='analyzer.html'">
-            Upload Statement
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
-        </button>
-    </div>
-
-    <!-- Dashboard Content -->
-    <div class="dashboard-content" id="dashboardContent">
-        <div class="dashboard-main">
-            <!-- Header -->
-            <div class="dashboard-header">
-                <div class="trust-badge">Analysis Complete</div>
-                <h1>Your Spending Dashboard</h1>
-                <p>Here's what we found in your statement and how you can optimize</p>
-            </div>
-
-            <!-- Stats Grid -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-label">Total Spent</div>
-                    <div class="stat-value" id="statTotal">₹0</div>
-                    <div class="stat-change positive">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
-                        </svg>
-                        This statement period
+    <!-- Upload Section -->
+    <section class="upload-section" id="uploadSection">
+        <div class="upload-container">
+            <span class="section-label">Privacy-First Analysis</span>
+            <h2>Select Your Card & Upload</h2>
+            <p>Choose your credit card, then upload your statement. We'll analyze your spending and find better rewards.</p>
+            
+            <!-- Card Selection -->
+            <div class="card-selection" id="cardSelection">
+                <div class="card-grid" id="cardGrid">
+                    <div class="card-select" onclick="selectCard('hdfc_infinia', 'HDFC Infinia Metal', this)">
+                        <div class="card-select-check">✓</div>
+                        <div class="card-select-bank">HDFC Bank</div>
+                        <div class="card-select-name">Infinia Metal</div>
+                        <div class="card-select-fee">₹12,500/year</div>
                     </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Rewards Missed</div>
-                    <div class="stat-value" id="statMissed" style="color: var(--red);">₹0</div>
-                    <div class="stat-change negative">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/>
-                        </svg>
-                        With better cards
+                    <div class="card-select" onclick="selectCard('sbi_cashback', 'SBI Cashback', this)">
+                        <div class="card-select-check">✓</div>
+                        <div class="card-select-bank">SBI Card</div>
+                        <div class="card-select-name">Cashback Card</div>
+                        <div class="card-select-fee">₹999/year</div>
                     </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Potential Annual Savings</div>
-                    <div class="stat-value" id="statSavings" style="color: var(--green);">₹0</div>
-                    <div class="stat-change positive">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
-                        </svg>
-                        Switch to recommended
+                    <div class="card-select" onclick="selectCard('axis_ace', 'Axis ACE', this)">
+                        <div class="card-select-check">✓</div>
+                        <div class="card-select-bank">Axis Bank</div>
+                        <div class="card-select-name">ACE Credit Card</div>
+                        <div class="card-select-fee">₹499/year</div>
                     </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Transactions</div>
-                    <div class="stat-value" id="statTxns">0</div>
-                    <div class="stat-change positive">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
-                        </svg>
-                        Analyzed
+                    <div class="card-select" onclick="selectCard('icici_amazon', 'ICICI Amazon Pay', this)">
+                        <div class="card-select-check">✓</div>
+                        <div class="card-select-bank">ICICI Bank</div>
+                        <div class="card-select-name">Amazon Pay</div>
+                        <div class="card-select-fee">Free</div>
+                    </div>
+                    <div class="card-select" onclick="selectCard('hdfc_millennia', 'HDFC Millennia', this)">
+                        <div class="card-select-check">✓</div>
+                        <div class="card-select-bank">HDFC Bank</div>
+                        <div class="card-select-name">Millennia</div>
+                        <div class="card-select-fee">₹1,000/year</div>
+                    </div>
+                    <div class="card-select" onclick="selectCard('other', 'Other Card', this)">
+                        <div class="card-select-check">✓</div>
+                        <div class="card-select-bank">Other</div>
+                        <div class="card-select-name">Different Card</div>
+                        <div class="card-select-fee">Any bank</div>
                     </div>
                 </div>
             </div>
 
-            <!-- Charts Grid -->
-            <div class="charts-grid">
-                <!-- Pie Chart -->
-                <div class="chart-container">
-                    <div class="chart-header">
-                        <h3 class="chart-title">Spending by Category</h3>
-                    </div>
-                    <div class="pie-chart-wrapper">
-                        <div class="pie-chart-container" id="pieContainer">
-                            <svg class="pie-chart-svg" viewBox="0 0 100 100" id="pieSvg">
-                                <!-- Segments will be generated by JS -->
-                            </svg>
-                            <div class="pie-center">
-                                <div class="pie-center-value" id="pieCenterValue">₹0</div>
-                                <div class="pie-center-label">Total Spent</div>
-                            </div>
-                            <div class="pie-tooltip" id="pieTooltip"></div>
-                        </div>
-                        <div class="pie-legend" id="pieLegend">
-                            <!-- Legend items will be generated by JS -->
-                        </div>
-                    </div>
+            <!-- Upload Zone -->
+            <div class="upload-zone" id="uploadZone">
+                <div class="upload-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="17 8 12 3 7 8"/>
+                        <line x1="12" y1="3" x2="12" y2="15"/>
+                    </svg>
                 </div>
+                <div class="upload-text">Drop your statement here</div>
+                <div class="upload-subtitle">or click to browse (PDF, CSV, Excel)</div>
+            </div>
 
-                <!-- Monthly Trend -->
-                <div class="chart-container">
-                    <div class="chart-header">
-                        <h3 class="chart-title">Monthly Trend</h3>
+            <input type="file" id="fileInput" style="display: none;" accept=".pdf,.csv,.xlsx,.xls">
+        </div>
+    </section>
+
+    <!-- Dashboard (FROM OLD ANALYZER.HTML) -->
+    <div class="dashboard-main" id="dashboardMain">
+        <!-- Header -->
+        <div class="dashboard-header">
+            <div class="dashboard-header-actions">
+                <button class="btn-reset" onclick="resetAnalysis()">
+                    <svg viewBox="0 0 24 24">
+                        <polyline points="23 4 23 10 17 10"></polyline>
+                        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+                    </svg>
+                    Analyze New Statement
+                </button>
+            </div>
+            <div class="trust-badge">Analysis Complete</div>
+            <h1>Your Spending Dashboard</h1>
+            <p>Here's what we found in your statement and how you can optimize</p>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Spent</div>
+                <div class="stat-value" id="statTotal">₹0</div>
+                <div class="stat-change positive">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                    </svg>
+                    This statement period
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Rewards Missed</div>
+                <div class="stat-value" id="statMissed" style="color: var(--red);">₹0</div>
+                <div class="stat-change negative">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/>
+                    </svg>
+                    With better cards
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Potential Annual Savings</div>
+                <div class="stat-value" id="statSavings" style="color: var(--green);">₹0</div>
+                <div class="stat-change positive">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                    </svg>
+                    Switch to recommended
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Transactions</div>
+                <div class="stat-value" id="statTxns">0</div>
+                <div class="stat-change positive">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                    </svg>
+                    Analyzed
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="charts-grid">
+            <!-- Pie Chart -->
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h3 class="chart-title">Spending by Category</h3>
+                </div>
+                <div class="pie-chart-wrapper">
+                    <div class="pie-chart-container" id="pieContainer">
+                        <svg class="pie-chart-svg" viewBox="0 0 100 100" id="pieSvg">
+                            <!-- Segments will be generated by JS -->
+                        </svg>
+                        <div class="pie-center">
+                            <div class="pie-center-value" id="pieCenterValue">₹0</div>
+                            <div class="pie-center-label">Total Spent</div>
+                        </div>
+                        <div class="pie-tooltip" id="pieTooltip"></div>
                     </div>
-                    <div class="bar-chart" id="barChart">
-                        <div class="bar-item">
-                            <div class="bar-value" id="barVal1">₹0</div>
-                            <div class="bar-track"><div class="bar-fill" id="barFill1"></div></div>
-                            <div class="bar-label">Jan</div>
-                        </div>
-                        <div class="bar-item">
-                            <div class="bar-value" id="barVal2">₹0</div>
-                            <div class="bar-track"><div class="bar-fill" id="barFill2"></div></div>
-                            <div class="bar-label">Feb</div>
-                        </div>
-                        <div class="bar-item">
-                            <div class="bar-value" id="barVal3">₹0</div>
-                            <div class="bar-track"><div class="bar-fill" id="barFill3"></div></div>
-                            <div class="bar-label">Mar</div>
-                        </div>
-                        <div class="bar-item">
-                            <div class="bar-value" id="barVal4">₹0</div>
-                            <div class="bar-track"><div class="bar-fill" id="barFill4"></div></div>
-                            <div class="bar-label">Apr</div>
-                        </div>
-                        <div class="bar-item">
-                            <div class="bar-value" id="barVal5">₹0</div>
-                            <div class="bar-track"><div class="bar-fill" id="barFill5"></div></div>
-                            <div class="bar-label">May</div>
-                        </div>
-                        <div class="bar-item">
-                            <div class="bar-value" id="barVal6">₹0</div>
-                            <div class="bar-track"><div class="bar-fill" id="barFill6"></div></div>
-                            <div class="bar-label">Jun</div>
-                        </div>
+                    <div class="pie-legend" id="pieLegend">
+                        <!-- Legend items will be generated by JS -->
                     </div>
                 </div>
             </div>
 
-            <!-- Recommendations -->
-            <div class="recommendations-section">
-                <div class="section-header">
-                    <h2>Recommended Cards For You</h2>
-                    <p>Based on your spending pattern, these cards could earn you more rewards</p>
+            <!-- Monthly Trend -->
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h3 class="chart-title">Monthly Trend</h3>
                 </div>
-                <div class="recommendation-cards" id="recommendationCards">
-                    <!-- Cards will be inserted here -->
+                <div class="bar-chart" id="barChart">
+                    <div class="bar-item">
+                        <div class="bar-value" id="barVal1">₹0</div>
+                        <div class="bar-track"><div class="bar-fill" id="barFill1"></div></div>
+                        <div class="bar-label">Jan</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-value" id="barVal2">₹0</div>
+                        <div class="bar-track"><div class="bar-fill" id="barFill2"></div></div>
+                        <div class="bar-label">Feb</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-value" id="barVal3">₹0</div>
+                        <div class="bar-track"><div class="bar-fill" id="barFill3"></div></div>
+                        <div class="bar-label">Mar</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-value" id="barVal4">₹0</div>
+                        <div class="bar-track"><div class="bar-fill" id="barFill4"></div></div>
+                        <div class="bar-label">Apr</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-value" id="barVal5">₹0</div>
+                        <div class="bar-track"><div class="bar-fill" id="barFill5"></div></div>
+                        <div class="bar-label">May</div>
+                    </div>
+                    <div class="bar-item">
+                        <div class="bar-value" id="barVal6">₹0</div>
+                        <div class="bar-track"><div class="bar-fill" id="barFill6"></div></div>
+                        <div class="bar-label">Jun</div>
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Transactions -->
-            <div class="transactions-section">
-                <div class="section-header">
-                    <h2>Recent Transactions</h2>
-                    <p>Your latest spending activity</p>
-                </div>
-                <div class="table-header">
-                    <div class="table-header-cell">Merchant</div>
-                    <div class="table-header-cell">Category</div>
-                    <div class="table-header-cell">Date</div>
-                    <div class="table-header-cell">Amount</div>
-                </div>
-                <div id="transactionsList">
-                    <!-- Transactions will be inserted here -->
-                </div>
+        <!-- Recommendations -->
+        <div class="recommendations-section">
+            <div class="section-header">
+                <h2>Recommended Cards For You</h2>
+                <p>Based on your spending pattern, these cards could earn you more rewards</p>
+            </div>
+            <div class="recommendation-cards" id="recommendationCards">
+                <!-- Cards will be inserted here -->
+            </div>
+        </div>
+
+        <!-- Transactions -->
+        <div class="transactions-section">
+            <div class="section-header">
+                <h2>Recent Transactions</h2>
+                <p>Your latest spending activity</p>
+            </div>
+            <div class="table-header">
+                <div class="table-header-cell">Merchant</div>
+                <div class="table-header-cell">Category</div>
+                <div class="table-header-cell">Date</div>
+                <div class="table-header-cell">Amount</div>
+            </div>
+            <div id="transactionsList">
+                <!-- Transactions will be inserted here -->
             </div>
         </div>
     </div>
@@ -984,6 +1059,8 @@
     <!-- Toast -->
     <div id="toast"></div>
 
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
     <script>
         // Format currency
         function formatCurrency(amount) {
@@ -994,38 +1071,221 @@
         // Show toast
         function showToast(message) {
             const toast = document.getElementById('toast');
+            if (!toast) return;
             toast.textContent = message;
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        // Animate value
-        function animateValue(id, start, end, duration, prefix = '') {
-            const obj = document.getElementById(id);
-            if (!obj) return;
-
-            const range = end - start;
-            const stepTime = Math.max(Math.floor(duration / (range || 1)), 50);
-            let startTime = new Date().getTime();
-            let endTime = startTime + duration;
-
-            function run() {
-                let now = new Date().getTime();
-                let remaining = Math.max((endTime - now) / duration, 0);
-                let value = Math.round(end - (remaining * range));
-                obj.textContent = prefix + value.toLocaleString('en-IN');
-                if (value == end) clearInterval(timer);
-            }
-
-            let timer = setInterval(run, stepTime);
-            run();
+        // Reset analysis - show upload section again
+        function resetAnalysis() {
+            // Clear stored analysis
+            localStorage.removeItem('cardmax_analysis');
+            localStorage.removeItem('cardmax_selected_card');
+            
+            // Reset UI
+            selectedCardId = null;
+            document.querySelectorAll('.card-select').forEach(el => el.classList.remove('selected'));
+            
+            // Hide dashboard, show upload
+            document.getElementById('dashboardMain').classList.remove('active');
+            document.getElementById('uploadSection').style.display = 'flex';
+            
+            // Reset upload zone
+            const uploadZone = document.getElementById('uploadZone');
+            uploadZone.classList.remove('active');
+            uploadZone.innerHTML = `
+                <div class="upload-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="17 8 12 3 7 8"/>
+                        <line x1="12" y1="3" x2="12" y2="15"/>
+                    </svg>
+                </div>
+                <div class="upload-text">Drop your statement here</div>
+                <div class="upload-subtitle">or click to browse (PDF, CSV, Excel)</div>
+            `;
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            showToast('Ready for new analysis');
         }
 
-        // ===== PIE CHART WITH SEGMENTS =====
+        // Card selection
+        let selectedCardId = null;
+
+        function selectCard(id, name, element) {
+            selectedCardId = id;
+            
+            // Update UI
+            document.querySelectorAll('.card-select').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            
+            // Show upload zone
+            document.getElementById('uploadZone').classList.add('active');
+            
+            // Save to localStorage
+            localStorage.setItem('cardmax_selected_card', id);
+            
+            showToast(`Selected: ${name}`);
+        }
+
+        // Upload handling
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+
+        if (uploadZone) {
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                uploadZone.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                uploadZone.addEventListener(eventName, () => {
+                    uploadZone.classList.add('dragover');
+                });
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                uploadZone.addEventListener(eventName, () => {
+                    uploadZone.classList.remove('dragover');
+                });
+            });
+
+            uploadZone.addEventListener('drop', (e) => {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                if (files.length) handleFile(files[0]);
+            });
+
+            uploadZone.addEventListener('click', () => {
+                if (!selectedCardId) {
+                    showToast('Please select a card first');
+                    return;
+                }
+                fileInput.click();
+            });
+        }
+
+        if (fileInput) {
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length) handleFile(e.target.files[0]);
+            });
+        }
+
+        async function handleFile(file) {
+            if (!file) return;
+            
+            const allowed = ['.csv', '.xlsx', '.xls', '.pdf'];
+            const ext = '.' + file.name.split('.').pop().toLowerCase();
+            
+            if (!allowed.includes(ext)) {
+                showToast('Please upload CSV, Excel, or PDF');
+                return;
+            }
+
+            // Show loading
+            uploadZone.innerHTML = `
+                <div class="upload-loading">
+                    <div class="spinner"></div>
+                    <div class="upload-text">Analyzing your statement...</div>
+                    <div class="upload-subtitle">This may take a few moments</div>
+                </div>
+            `;
+
+            try {
+                const formData = new FormData();
+                formData.append('file', file);
+                if (selectedCardId) {
+                    formData.append('card_id', selectedCardId);
+                }
+
+                const API_BASE_URL = window.location.hostname === 'localhost' 
+                    ? 'http://localhost:8000' 
+                    : window.location.origin;
+
+                const response = await fetch(`${API_BASE_URL}/api/analyze`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Upload failed: ${response.status}`);
+                }
+
+                const result = await response.json();
+
+                if (result.success) {
+                    localStorage.setItem('cardmax_analysis', JSON.stringify(result.data));
+                    showDashboard(result.data);
+                    showToast('Analysis complete!');
+                } else {
+                    throw new Error(result.error || 'Analysis failed');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showToast('Error: ' + error.message);
+                // Reset upload zone
+                uploadZone.innerHTML = `
+                    <div class="upload-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="17 8 12 3 7 8"/>
+                            <line x1="12" y1="3" x2="12" y2="15"/>
+                        </svg>
+                    </div>
+                    <div class="upload-text">Drop your statement here</div>
+                    <div class="upload-subtitle">or click to browse (PDF, CSV, Excel)</div>
+                `;
+            }
+        }
+
+        // Show dashboard with data
+        function showDashboard(data) {
+            // Hide upload, show dashboard
+            document.getElementById('uploadSection').style.display = 'none';
+            document.getElementById('dashboardMain').classList.add('active');
+
+            const totals = data.totals || {};
+            const categoryTotals = data.category_totals || {};
+            const transactions = data.transactions || [];
+            const bestCards = data.best_cards || [];
+
+            const totalSpend = totals.total_spend || 0;
+            const missedRewards = totalSpend * 0.02;
+            const annualSavings = missedRewards * 12;
+
+            // Update stats
+            document.getElementById('statTotal').textContent = formatCurrency(totalSpend);
+            document.getElementById('statMissed').textContent = formatCurrency(missedRewards);
+            document.getElementById('statSavings').textContent = formatCurrency(annualSavings);
+            document.getElementById('statTxns').textContent = totals.transaction_count || 0;
+
+            // Update pie center
+            document.getElementById('pieCenterValue').textContent = formatCurrency(totalSpend);
+
+            // Create pie chart
+            createPieChart(categoryTotals);
+
+            // Animate bar chart
+            animateBarChart();
+
+            // Render recommendations
+            renderRecommendations(bestCards);
+
+            // Render transactions
+            renderTransactions(transactions);
+        }
+
+        // Create pie chart with segments
         function createPieChart(categories) {
             if (!categories || Object.keys(categories).length === 0) return;
 
-            // Filter and sort categories
             const sorted = Object.entries(categories)
                 .filter(([cat, amount]) => amount > 100 && cat !== 'CASHBACK')
                 .sort((a, b) => b[1] - a[1])
@@ -1040,7 +1300,6 @@
             const tooltip = document.getElementById('pieTooltip');
             const legend = document.getElementById('pieLegend');
 
-            // Clear existing
             svg.innerHTML = '';
             legend.innerHTML = '';
 
@@ -1054,7 +1313,6 @@
                 const angle = (amount / total) * 360;
                 const color = colors[i % colors.length];
 
-                // Calculate segment path
                 const startAngle = (currentAngle - 90) * Math.PI / 180;
                 const endAngle = (currentAngle + angle - 90) * Math.PI / 180;
 
@@ -1065,7 +1323,6 @@
 
                 const largeArc = angle > 180 ? 1 : 0;
 
-                // Create path for segment
                 const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
                 const d = `M ${centerX} ${centerY} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2} Z`;
 
@@ -1075,24 +1332,8 @@
                 path.setAttribute('stroke-width', '2');
                 path.classList.add('pie-segment');
 
-                // Hover events
-                path.addEventListener('mouseenter', (e) => {
-                    const rect = svg.getBoundingClientRect();
-                    const containerRect = document.getElementById('pieContainer').getBoundingClientRect();
-
-                    tooltip.innerHTML = `
-                        <strong>${category.replace(/_/g, ' ')}</strong>
-                        <span>${percentage.toFixed(1)}% · ${formatCurrency(amount)}</span>
-                    `;
-
-                    // Position tooltip above segment
-                    const midAngle = (currentAngle + angle / 2 - 90) * Math.PI / 180;
-                    const tooltipRadius = radius * 0.7;
-                    const tooltipX = 50 + (tooltipRadius * Math.cos(midAngle) / 100 * 280);
-                    const tooltipY = 50 + (tooltipRadius * Math.sin(midAngle) / 100 * 280);
-
-                    tooltip.style.left = tooltipX + 'px';
-                    tooltip.style.top = (tooltipY - 40) + 'px';
+                path.addEventListener('mouseenter', () => {
+                    tooltip.innerHTML = `<strong>${category.replace(/_/g, ' ')}</strong><br>${percentage.toFixed(1)}% · ${formatCurrency(amount)}`;
                     tooltip.classList.add('show');
                 });
 
@@ -1100,7 +1341,6 @@
                     tooltip.classList.remove('show');
                 });
 
-                // Animate in
                 path.style.opacity = '0';
                 path.style.transform = 'scale(0.8)';
                 svg.appendChild(path);
@@ -1111,7 +1351,6 @@
                     path.style.transform = 'scale(1)';
                 }, i * 100);
 
-                // Add to legend
                 const legendItem = document.createElement('div');
                 legendItem.className = 'legend-item';
                 legendItem.innerHTML = `
@@ -1122,7 +1361,6 @@
                     </div>
                 `;
 
-                // Legend hover highlights segment
                 legendItem.addEventListener('mouseenter', () => {
                     path.style.transform = 'scale(1.05)';
                     path.style.filter = 'drop-shadow(0 8px 16px rgba(0,0,0,0.2))';
@@ -1140,7 +1378,7 @@
         }
 
         // Animate bar chart
-        function animateBarChart(monthlyData) {
+        function animateBarChart() {
             const bars = [
                 { fill: 'barFill1', val: 'barVal1' },
                 { fill: 'barFill2', val: 'barVal2' },
@@ -1150,7 +1388,7 @@
                 { fill: 'barFill6', val: 'barVal6' }
             ];
 
-            const values = monthlyData || [45000, 52000, 38000, 61000, 48000, 55000];
+            const values = [45000, 52000, 38000, 61000, 48000, 55000];
             const max = Math.max(...values);
 
             bars.forEach((bar, i) => {
@@ -1167,60 +1405,6 @@
                     }
                 }, i * 100);
             });
-        }
-
-        // Load dashboard data
-        function loadDashboard() {
-            const data = localStorage.getItem('cardmax_analysis');
-
-            if (!data) {
-                document.getElementById('loadingOverlay').classList.add('hidden');
-                document.getElementById('noDataState').style.display = 'block';
-                return;
-            }
-
-            try {
-                const analysis = JSON.parse(data);
-                console.log('Loading analysis:', analysis);
-
-                document.getElementById('loadingOverlay').classList.add('hidden');
-                document.getElementById('dashboardContent').classList.add('active');
-
-                const totals = analysis.totals || {};
-                const categoryTotals = analysis.category_totals || {};
-                const transactions = analysis.transactions || [];
-                const bestCards = analysis.best_cards || [];
-
-                const totalSpend = totals.total_spend || 0;
-                const missedRewards = totalSpend * 0.02;
-                const annualSavings = missedRewards * 12;
-
-                // Update stats
-                setTimeout(() => animateValue('statTotal', 0, totalSpend, 1000, '₹'), 100);
-                setTimeout(() => animateValue('statMissed', 0, missedRewards, 1000, '₹'), 200);
-                setTimeout(() => animateValue('statSavings', 0, annualSavings, 1000, '₹'), 300);
-                setTimeout(() => animateValue('statTxns', 0, totals.transaction_count || 0, 800, ''), 400);
-
-                // Update pie center
-                document.getElementById('pieCenterValue').textContent = formatCurrency(totalSpend);
-
-                // Create pie chart with segments
-                setTimeout(() => createPieChart(categoryTotals), 500);
-
-                // Animate bar chart
-                setTimeout(() => animateBarChart(), 800);
-
-                // Render recommendations
-                renderRecommendations(bestCards);
-
-                // Render transactions
-                renderTransactions(transactions);
-
-            } catch (e) {
-                console.error('Error loading analysis:', e);
-                document.getElementById('loadingOverlay').classList.add('hidden');
-                document.getElementById('noDataState').style.display = 'block';
-            }
         }
 
         // Render recommendations
@@ -1295,17 +1479,16 @@
             `).join('');
         }
 
-        // Navbar scroll effect
-        window.addEventListener('scroll', () => {
-            const navbar = document.getElementById('navbar');
-            if (navbar) {
-                navbar.classList.toggle('scrolled', window.scrollY > 50);
+        // Check for existing analysis on load
+        window.addEventListener('load', () => {
+            const saved = localStorage.getItem('cardmax_analysis');
+            if (saved) {
+                try {
+                    showDashboard(JSON.parse(saved));
+                } catch(e) {
+                    localStorage.removeItem('cardmax_analysis');
+                }
             }
-        });
-
-        // Load on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(loadDashboard, 500);
         });
     </script>
 </body>
