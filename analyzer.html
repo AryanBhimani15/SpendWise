@@ -1016,14 +1016,8 @@
             .dropdown-menu { max-height: 280px; }
         }
     </style>
-<base target="_blank">
-<base target="_blank">
 </head>
 <body>
-    <script>
-        function populateCards() {}
-        function initScrollProgress() {}
-    </script>
     <nav id="navbar">
         <div class="nav-container">
             <a href="index.html" class="logo">SpendWise</a>
@@ -1250,8 +1244,23 @@
 
     <div id="toast"></div>
 
-    <script src="js/main.js"></script>
     <script>
+        // ============================================
+        // FIXED: All JavaScript in one place, no duplicates
+        // ============================================
+
+        // Toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function formatCurrency(amount) {
+            if (!amount || amount === 0) return '₹0';
+            return '₹' + Math.round(amount).toLocaleString('en-IN');
+        }
 
         // ============================================
         // DATA NORMALIZATION LAYER
@@ -1782,16 +1791,11 @@
         let selectedBank = null;
         let selectedCard = null;
         let selectedCardId = null;
+        let isUploading = false; // FIXED: Prevent double uploads
 
-        document.addEventListener('DOMContentLoaded', () => {
-            populateBankDropdown();
-            document.addEventListener('click', (e) => {
-                if (!e.target.closest('.custom-dropdown')) {
-                    closeAllDropdowns();
-                }
-            });
-            document.getElementById('fileInput').addEventListener('change', handleFileSelect);
-        });
+        // ============================================
+        // DROPDOWN FUNCTIONS
+        // ============================================
 
         function populateBankDropdown() {
             const menu = document.getElementById('bankMenu');
@@ -1892,18 +1896,33 @@
             showToast('Selection reset — start over');
         }
 
+        // ============================================
+        // FIXED: FILE UPLOAD - Prevent Double Upload
+        // ============================================
+
         function handleFileSelect(e) {
             if (e.target.files.length) handleFile(e.target.files[0]);
         }
 
         async function handleFile(file) {
+            // FIXED: Prevent duplicate uploads
+            if (isUploading) {
+                console.log('Upload already in progress, ignoring duplicate');
+                return;
+            }
+            
             if (!file) return;
+            
             const allowed = ['.csv', '.xlsx', '.xls', '.pdf'];
             const ext = '.' + file.name.split('.').pop().toLowerCase();
             if (!allowed.includes(ext)) {
                 showToast('Please upload CSV, Excel, or PDF');
                 return;
             }
+
+            // Set flag to prevent double upload
+            isUploading = true;
+            
             const uploadZone = document.getElementById('uploadZone');
             uploadZone.innerHTML = `
                 <div class="upload-loading">
@@ -1912,23 +1931,28 @@
                     <div class="upload-subtitle">This may take a few moments</div>
                 </div>
             `;
+            
             try {
                 const formData = new FormData();
                 formData.append('file', file);
                 if (selectedCardId) {
                     formData.append('card_id', selectedCardId);
                 }
+                
                 const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
                     ? 'http://localhost:8000' 
                     : window.location.origin;
+                    
                 const response = await fetch(`${API_BASE_URL}/api/analyze`, {
                     method: 'POST',
                     body: formData,
                 });
+                
                 if (!response.ok) {
                     const errorData = await response.json().catch(() => ({}));
                     throw new Error(errorData.error || `Upload failed: ${response.status}`);
                 }
+                
                 const result = await response.json();
                 if (result.success) {
                     localStorage.setItem('cardmax_analysis', JSON.stringify(result.data));
@@ -1940,7 +1964,10 @@
             } catch (error) {
                 console.error('Upload error:', error);
                 showToast('Error: ' + error.message);
+                
+                // Reset upload zone on error
                 setTimeout(() => {
+                    isUploading = false;
                     uploadZone.innerHTML = `
                         <div class="upload-icon">
                             <svg viewBox="0 0 24 24">
@@ -1956,45 +1983,90 @@
             }
         }
 
-        const uploadZone = document.getElementById('uploadZone');
-        if (uploadZone) {
-            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-                uploadZone.addEventListener(eventName, (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                });
-            });
-            ['dragenter', 'dragover'].forEach(eventName => {
-                uploadZone.addEventListener(eventName, () => {
-                    uploadZone.classList.add('dragover');
-                });
-            });
-            ['dragleave', 'drop'].forEach(eventName => {
-                uploadZone.addEventListener(eventName, () => {
-                    uploadZone.classList.remove('dragover');
-                });
-            });
-            uploadZone.addEventListener('drop', (e) => {
-                const dt = e.dataTransfer;
-                const files = dt.files;
-                if (files.length) handleFile(files[0]);
-            });
-            uploadZone.addEventListener('click', () => {
-                document.getElementById('fileInput').click();
-            });
+        // ============================================
+        // FIXED: RESET ANALYSIS - Complete Reset
+        // ============================================
+
+        function resetAnalysis() {
+            // Clear all stored data
+            localStorage.removeItem('cardmax_analysis');
+            localStorage.removeItem('cardmax_selected_bank');
+            localStorage.removeItem('cardmax_selected_card');
+            localStorage.removeItem('cardmax_selected_card_id');
+
+            // Reset state variables
+            selectedBank = null;
+            selectedCard = null;
+            selectedCardId = null;
+            isUploading = false;
+
+            // Hide dashboard
+            const dashboard = document.getElementById('dashboardMain');
+            dashboard.classList.remove('active');
+            dashboard.style.display = 'none';
+
+            // Show upload section
+            const uploadSection = document.getElementById('uploadSection');
+            uploadSection.style.display = 'flex';
+
+            // Reset cascade steps
+            document.getElementById('bankPlaceholder').textContent = 'Choose your bank...';
+            document.getElementById('bankPlaceholder').classList.add('placeholder');
+            document.getElementById('stepCard').classList.remove('active');
+            document.getElementById('selectedCardDisplay').classList.remove('active');
+
+            // Reset upload zone
+            const uploadZone = document.getElementById('uploadZone');
+            uploadZone.classList.remove('active');
+            uploadZone.innerHTML = `
+                <div class="upload-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="17 8 12 3 7 8"/>
+                        <line x1="12" y1="3" x2="12" y2="15"/>
+                    </svg>
+                </div>
+                <div class="upload-text">Drop your statement here</div>
+                <div class="upload-subtitle">or click to browse (PDF, CSV, Excel)</div>
+            `;
+
+            // Clear dashboard data
+            showEmptyState();
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            showToast('Ready for new analysis');
         }
 
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
+        function showEmptyState() {
+            document.getElementById('statTotal').textContent = '₹0';
+            document.getElementById('statMissed').textContent = '₹0';
+            document.getElementById('statMissed').style.color = 'var(--red)';
+            document.getElementById('statSavings').textContent = '₹0';
+            document.getElementById('statTxns').textContent = '0';
+            document.getElementById('pieCenterValue').textContent = '₹0';
+
+            for (let i = 1; i <= 6; i++) {
+                const fill = document.getElementById('barFill' + i);
+                const val = document.getElementById('barVal' + i);
+                const label = document.getElementById('barLabel' + i);
+                if (fill) fill.style.height = '0%';
+                if (val) {
+                    val.textContent = '₹0';
+                    val.classList.remove('show');
+                }
+                if (label) label.textContent = '-';
+            }
+
+            document.getElementById('pieSvg').innerHTML = '';
+            document.getElementById('pieLegend').innerHTML = '<div style="color: var(--text-light); text-align: center; padding: 40px;">Upload a statement to see your spending breakdown</div>';
+            document.getElementById('recommendationCards').innerHTML = '<p style="color: var(--text-light); text-align: center; padding: 40px;">Complete analysis to see card recommendations</p>';
+            document.getElementById('transactionsList').innerHTML = '<div style="color: var(--text-light); text-align: center; padding: 40px;">No transactions to display</div>';
         }
 
-        function formatCurrency(amount) {
-            if (!amount || amount === 0) return '₹0';
-            return '₹' + Math.round(amount).toLocaleString('en-IN');
-        }
+        // ============================================
+        // DASHBOARD DISPLAY FUNCTIONS
+        // ============================================
 
         function showDashboard(data) {
             document.getElementById('uploadSection').style.display = 'none';
@@ -2029,6 +2101,9 @@
             renderTransactions(transactions);
 
             dashboard.scrollIntoView({ behavior: 'smooth' });
+            
+            // Reset uploading flag after successful display
+            isUploading = false;
         }
 
         function createPieChart(categories) {
@@ -2270,73 +2345,66 @@
             `).join('');
         }
 
-        function showEmptyState() {
-            document.getElementById('statTotal').textContent = '₹0';
-            document.getElementById('statMissed').textContent = '₹0';
-            document.getElementById('statMissed').style.color = 'var(--red)';
-            document.getElementById('statSavings').textContent = '₹0';
-            document.getElementById('statTxns').textContent = '0';
-            document.getElementById('pieCenterValue').textContent = '₹0';
+        // ============================================
+        // INITIALIZATION
+        // ============================================
 
-            for (let i = 1; i <= 6; i++) {
-                const fill = document.getElementById('barFill' + i);
-                const val = document.getElementById('barVal' + i);
-                const label = document.getElementById('barLabel' + i);
-                if (fill) fill.style.height = '0%';
-                if (val) {
-                    val.textContent = '₹0';
-                    val.classList.remove('show');
+        document.addEventListener('DOMContentLoaded', () => {
+            populateBankDropdown();
+            
+            // Close dropdowns when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.custom-dropdown')) {
+                    closeAllDropdowns();
                 }
-                if (label) label.textContent = '-';
+            });
+
+            // FIXED: Single file input listener
+            const fileInput = document.getElementById('fileInput');
+            if (fileInput) {
+                fileInput.addEventListener('change', handleFileSelect);
             }
 
-            document.getElementById('pieSvg').innerHTML = '';
-            document.getElementById('pieLegend').innerHTML = '<div style="color: var(--text-light); text-align: center; padding: 40px;">Upload a statement to see your spending breakdown</div>';
-            document.getElementById('recommendationCards').innerHTML = '<p style="color: var(--text-light); text-align: center; padding: 40px;">Complete analysis to see card recommendations</p>';
-            document.getElementById('transactionsList').innerHTML = '<div style="color: var(--text-light); text-align: center; padding: 40px;">No transactions to display</div>';
-        }
-
-        function resetAnalysis() {
-            localStorage.removeItem('cardmax_analysis');
-            localStorage.removeItem('cardmax_selected_bank');
-            localStorage.removeItem('cardmax_selected_card');
-            localStorage.removeItem('cardmax_selected_card_id');
-
-            selectedBank = null;
-            selectedCard = null;
-            selectedCardId = null;
-
-            const dashboard = document.getElementById('dashboardMain');
-            dashboard.classList.remove('active');
-            dashboard.style.display = 'none';
-
-            document.getElementById('uploadSection').style.display = 'flex';
-
-            document.getElementById('bankPlaceholder').textContent = 'Choose your bank...';
-            document.getElementById('bankPlaceholder').classList.add('placeholder');
-            document.getElementById('stepCard').classList.remove('active');
-            document.getElementById('selectedCardDisplay').classList.remove('active');
-
+            // FIXED: Single upload zone setup
             const uploadZone = document.getElementById('uploadZone');
-            uploadZone.classList.remove('active');
-            uploadZone.innerHTML = `
-                <div class="upload-icon">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                        <polyline points="17 8 12 3 7 8"/>
-                        <line x1="12" y1="3" x2="12" y2="15"/>
-                    </svg>
-                </div>
-                <div class="upload-text">Drop your statement here</div>
-                <div class="upload-subtitle">or click to browse (PDF, CSV, Excel)</div>
-            `;
+            if (uploadZone) {
+                // Prevent default drag behaviors
+                ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                    uploadZone.addEventListener(eventName, (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    });
+                });
 
-            showEmptyState();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            showToast('Ready for new analysis');
-        }
+                // Drag visual feedback
+                ['dragenter', 'dragover'].forEach(eventName => {
+                    uploadZone.addEventListener(eventName, () => {
+                        uploadZone.classList.add('dragover');
+                    });
+                });
 
-        window.addEventListener('load', () => {
+                ['dragleave', 'drop'].forEach(eventName => {
+                    uploadZone.addEventListener(eventName, () => {
+                        uploadZone.classList.remove('dragover');
+                    });
+                });
+
+                // Drop handler
+                uploadZone.addEventListener('drop', (e) => {
+                    const dt = e.dataTransfer;
+                    const files = dt.files;
+                    if (files.length) handleFile(files[0]);
+                });
+
+                // Click handler
+                uploadZone.addEventListener('click', (e) => {
+                    // Don't trigger if clicking during upload
+                    if (isUploading) return;
+                    document.getElementById('fileInput').click();
+                });
+            }
+
+            // Check for saved analysis on load
             const saved = localStorage.getItem('cardmax_analysis');
             if (saved) {
                 try {

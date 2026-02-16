@@ -15,6 +15,7 @@ const compareCardsData = [
         diningReward: '3.3%',
         billReward: '1.6%',
         lounge: 'Unlimited Global',
+        
         forex: '2%',
         minIncome: '₹30L/year',
         approval: 'Difficult',
