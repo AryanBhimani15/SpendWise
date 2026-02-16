@@ -42,83 +42,228 @@
             line-height: 1.6;
         }
 
-        /* Card Selection Grid */
-        .card-selection {
+        .cascade-container {
             margin-bottom: 40px;
+            text-align: left;
+            background: var(--surface);
+            border-radius: 24px;
+            padding: 32px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
         }
 
-        .card-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-            margin-top: 24px;
+        .cascade-step {
+            margin-bottom: 24px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        .card-select {
-            padding: 20px;
+        .cascade-step.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .cascade-step:last-child {
+            margin-bottom: 0;
+        }
+
+        .cascade-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 12px;
+        }
+
+        .custom-dropdown {
+            position: relative;
+            width: 100%;
+        }
+
+        .dropdown-trigger {
+            width: 100%;
+            padding: 20px 24px;
+            background: var(--bg);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .dropdown-trigger:hover {
+            border-color: var(--accent);
+            background: var(--surface);
+        }
+
+        .dropdown-trigger.active {
+            border-color: var(--brown);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .dropdown-trigger .placeholder {
+            color: var(--text-light);
+        }
+
+        .dropdown-arrow {
+            width: 20px;
+            height: 20px;
+            transition: transform 0.3s;
+            color: var(--text-light);
+        }
+
+        .dropdown-trigger.active .dropdown-arrow {
+            transform: rotate(180deg);
+            color: var(--brown);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            right: 0;
             background: var(--surface);
             border: 2px solid var(--border);
-            border-radius: 12px;
-            cursor: pointer;
+            border-radius: 16px;
+            max-height: 320px;
+            overflow-y: auto;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
             transition: all 0.3s;
-            text-align: left;
-            position: relative;
+            z-index: 100;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.12);
         }
 
-        .card-select:hover {
-            border-color: var(--accent);
-            transform: translateY(-2px);
+        .dropdown-menu.open {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
         }
 
-        .card-select.selected {
-            border-color: var(--brown);
-            background: rgba(92, 77, 60, 0.05);
-        }
-
-        .card-select-check {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            width: 24px;
-            height: 24px;
-            background: var(--brown);
-            color: white;
-            border-radius: 50%;
+        .dropdown-item {
+            padding: 18px 24px;
+            cursor: pointer;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            opacity: 0;
-            transform: scale(0);
-            transition: all 0.3s;
+            justify-content: space-between;
+            transition: all 0.2s;
+            border-bottom: 1px solid var(--border);
         }
 
-        .card-select.selected .card-select-check {
-            opacity: 1;
-            transform: scale(1);
+        .dropdown-item:last-child {
+            border-bottom: none;
         }
 
-        .card-select-bank {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-light);
-            margin-bottom: 4px;
+        .dropdown-item:hover {
+            background: var(--bg-warm);
         }
 
-        .card-select-name {
-            font-size: 15px;
+        .dropdown-item.selected {
+            background: rgba(212, 165, 116, 0.1);
+        }
+
+        .item-main {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .item-title {
+            font-size: 16px;
             font-weight: 600;
             color: var(--brown);
-            margin-bottom: 4px;
         }
 
-        .card-select-fee {
+        .item-subtitle {
             font-size: 13px;
             color: var(--text-light);
         }
 
-        /* Upload Zone */
+        .bank-indicator {
+            width: 4px;
+            height: 40px;
+            border-radius: 2px;
+            margin-right: 16px;
+        }
+
+        .bank-sbi { background: #1e7e34; }
+        .bank-hdfc { background: #004c8f; }
+        .bank-axis { background: #9e1b32; }
+        .bank-icici { background: #c41230; }
+        .bank-idfc { background: #e31837; }
+        .bank-kotak { background: #005f9e; }
+        .bank-amex { background: #006fcf; }
+        .bank-rbl { background: #6b2d5c; }
+        .bank-other { background: var(--text-light); }
+
+        .selected-card-display {
+            background: linear-gradient(135deg, var(--brown) 0%, #3d3226 100%);
+            border-radius: 20px;
+            padding: 28px;
+            margin-top: 8px;
+            display: none;
+            animation: slideUp 0.4s ease;
+        }
+
+        .selected-card-display.active {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .selected-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .selected-card-bank {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: rgba(255,255,255,0.7);
+        }
+
+        .selected-card-change {
+            font-size: 13px;
+            color: var(--accent);
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
+            padding: 0;
+        }
+
+        .selected-card-change:hover {
+            text-decoration: underline;
+        }
+
+        .selected-card-name {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 24px;
+            color: white;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .selected-card-type {
+            font-size: 14px;
+            color: rgba(255,255,255,0.8);
+        }
+
         .upload-zone {
             border: 3px dashed var(--border);
             border-radius: 28px;
@@ -128,11 +273,17 @@
             cursor: pointer;
             position: relative;
             overflow: hidden;
-            display: none; /* Hidden until card selected */
+            display: none;
         }
 
         .upload-zone.active {
             display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .upload-zone::before {
@@ -195,7 +346,6 @@
             color: var(--text-light);
         }
 
-        /* Loading State */
         .upload-loading {
             display: flex;
             flex-direction: column;
@@ -217,8 +367,6 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Dashboard Styles (FROM OLD ANALYZER.HTML) */
-    
         .dashboard-main {
             display: none;
             padding: 120px 5% 60px;
@@ -229,12 +377,6 @@
         .dashboard-main.active {
             display: block;
             animation: fadeIn 0.6s ease;
-        }
-        
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         .dashboard-header {
@@ -276,7 +418,6 @@
             color: var(--text-light);
         }
 
-        /* Dashboard Header Actions */
         .dashboard-header-actions {
             position: absolute;
             top: 0;
@@ -313,7 +454,6 @@
             }
         }
 
-        /* Stats Grid */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -361,7 +501,6 @@
         .stat-change.positive { color: var(--green); }
         .stat-change.negative { color: var(--red); }
 
-        /* Charts Grid */
         .charts-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -388,7 +527,6 @@
             color: var(--brown);
         }
 
-        /* Pie Chart */
         .pie-chart-wrapper {
             display: flex;
             flex-direction: column;
@@ -528,7 +666,6 @@
             color: var(--text-light);
         }
 
-        /* Bar Chart */
         .bar-chart {
             display: flex;
             align-items: flex-end;
@@ -586,7 +723,6 @@
             font-weight: 500;
         }
 
-        /* Recommendations */
         .recommendations-section {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -635,6 +771,10 @@
         .rec-card.best {
             background: linear-gradient(135deg, rgba(212, 165, 116, 0.1) 0%, rgba(212, 165, 116, 0.05) 100%);
             border-color: var(--accent);
+        }
+
+        .rec-card.current {
+            border-color: var(--green);
         }
 
         .rec-rank {
@@ -714,7 +854,18 @@
             border-top: 1px solid var(--border);
         }
 
-        /* Transactions Table */
+        .current-badge {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: var(--green);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
         .transactions-section {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -796,24 +947,83 @@
             color: var(--brown);
         }
 
-        /* Responsive */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-light);
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .legal-disclaimer {
+            background: var(--bg-warm);
+            border-top: 1px solid var(--border);
+            padding: 24px 5%;
+            margin-top: 40px;
+        }
+
+        .legal-disclaimer p {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .eligibility-notice {
+            background: rgba(212, 165, 116, 0.1);
+            border: 1px solid var(--accent);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            font-size: 13px;
+            color: var(--text);
+        }
+
+        .eligibility-notice strong {
+            color: var(--brown);
+        }
+
+        .no-data-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-light);
+        }
+
+        .no-data-state h3 {
+            font-size: 20px;
+            color: var(--brown);
+            margin-bottom: 8px;
+        }
+
         @media (max-width: 1024px) {
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
             .charts-grid { grid-template-columns: 1fr; }
             .recommendation-cards { grid-template-columns: 1fr; }
-            .card-grid { grid-template-columns: repeat(2, 1fr); }
+            .cascade-container { padding: 24px; }
         }
 
         @media (max-width: 768px) {
             .dashboard-header h1 { font-size: 32px; }
             .stats-grid { grid-template-columns: 1fr; }
-            .card-grid { grid-template-columns: 1fr; }
             .table-header, .table-row { grid-template-columns: 1fr; gap: 8px; }
+            .upload-container h2 { font-size: 32px; }
+            .dropdown-menu { max-height: 280px; }
         }
     </style>
+<base target="_blank">
+<base target="_blank">
 </head>
 <body>
-    <!-- Navigation -->
+    <script>
+        function populateCards() {}
+        function initScrollProgress() {}
+    </script>
     <nav id="navbar">
         <div class="nav-container">
             <a href="index.html" class="logo">SpendWise</a>
@@ -827,56 +1037,49 @@
         </div>
     </nav>
 
-    <!-- Upload Section -->
     <section class="upload-section" id="uploadSection">
         <div class="upload-container">
             <span class="section-label">Privacy-First Analysis</span>
             <h2>Select Your Card & Upload</h2>
-            <p>Choose your credit card, then upload your statement. We'll analyze your spending and find better rewards.</p>
-            
-            <!-- Card Selection -->
-            <div class="card-selection" id="cardSelection">
-                <div class="card-grid" id="cardGrid">
-                    <div class="card-select" onclick="selectCard('hdfc_infinia', 'HDFC Infinia Metal', this)">
-                        <div class="card-select-check">✓</div>
-                        <div class="card-select-bank">HDFC Bank</div>
-                        <div class="card-select-name">Infinia Metal</div>
-                        <div class="card-select-fee">₹12,500/year</div>
+            <p>Choose your bank and credit card, then upload your statement. We will analyze your spending and find better rewards.</p>
+
+            <div class="cascade-container" id="cascadeContainer">
+                <div class="cascade-step active" id="stepBank">
+                    <label class="cascade-label">Step 1: Select Your Bank</label>
+                    <div class="custom-dropdown" id="bankDropdown">
+                        <div class="dropdown-trigger" onclick="toggleDropdown('bank')">
+                            <span class="placeholder" id="bankPlaceholder">Choose your bank...</span>
+                            <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                        <div class="dropdown-menu" id="bankMenu"></div>
                     </div>
-                    <div class="card-select" onclick="selectCard('sbi_cashback', 'SBI Cashback', this)">
-                        <div class="card-select-check">✓</div>
-                        <div class="card-select-bank">SBI Card</div>
-                        <div class="card-select-name">Cashback Card</div>
-                        <div class="card-select-fee">₹999/year</div>
+                </div>
+
+                <div class="cascade-step" id="stepCard">
+                    <label class="cascade-label">Step 2: Select Your Card</label>
+                    <div class="custom-dropdown" id="cardDropdown">
+                        <div class="dropdown-trigger" onclick="toggleDropdown('card')">
+                            <span class="placeholder" id="cardPlaceholder">Choose your card...</span>
+                            <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </div>
+                        <div class="dropdown-menu" id="cardMenu"></div>
                     </div>
-                    <div class="card-select" onclick="selectCard('axis_ace', 'Axis ACE', this)">
-                        <div class="card-select-check">✓</div>
-                        <div class="card-select-bank">Axis Bank</div>
-                        <div class="card-select-name">ACE Credit Card</div>
-                        <div class="card-select-fee">₹499/year</div>
+                </div>
+
+                <div class="selected-card-display" id="selectedCardDisplay">
+                    <div class="selected-card-header">
+                        <span class="selected-card-bank" id="displayBank">BANK</span>
+                        <button class="selected-card-change" onclick="resetSelection()">Change</button>
                     </div>
-                    <div class="card-select" onclick="selectCard('icici_amazon', 'ICICI Amazon Pay', this)">
-                        <div class="card-select-check">✓</div>
-                        <div class="card-select-bank">ICICI Bank</div>
-                        <div class="card-select-name">Amazon Pay</div>
-                        <div class="card-select-fee">Free</div>
-                    </div>
-                    <div class="card-select" onclick="selectCard('hdfc_millennia', 'HDFC Millennia', this)">
-                        <div class="card-select-check">✓</div>
-                        <div class="card-select-bank">HDFC Bank</div>
-                        <div class="card-select-name">Millennia</div>
-                        <div class="card-select-fee">₹1,000/year</div>
-                    </div>
-                    <div class="card-select" onclick="selectCard('other', 'Other Card', this)">
-                        <div class="card-select-check">✓</div>
-                        <div class="card-select-bank">Other</div>
-                        <div class="card-select-name">Different Card</div>
-                        <div class="card-select-fee">Any bank</div>
-                    </div>
+                    <div class="selected-card-name" id="displayCard">Card Name</div>
+                    <div class="selected-card-type" id="displayType">Card Type</div>
                 </div>
             </div>
 
-            <!-- Upload Zone -->
             <div class="upload-zone" id="uploadZone">
                 <div class="upload-icon">
                     <svg viewBox="0 0 24 24">
@@ -893,9 +1096,7 @@
         </div>
     </section>
 
-    <!-- Dashboard (FROM OLD ANALYZER.HTML) -->
     <div class="dashboard-main" id="dashboardMain">
-        <!-- Header -->
         <div class="dashboard-header">
             <div class="dashboard-header-actions">
                 <button class="btn-reset" onclick="resetAnalysis()">
@@ -908,10 +1109,9 @@
             </div>
             <div class="trust-badge">Analysis Complete</div>
             <h1>Your Spending Dashboard</h1>
-            <p>Here's what we found in your statement and how you can optimize</p>
+            <p>Here is what we found in your statement and how you can optimize</p>
         </div>
 
-        <!-- Stats Grid -->
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-label">Total Spent</div>
@@ -955,31 +1155,24 @@
             </div>
         </div>
 
-        <!-- Charts Grid -->
         <div class="charts-grid">
-            <!-- Pie Chart -->
             <div class="chart-container">
                 <div class="chart-header">
                     <h3 class="chart-title">Spending by Category</h3>
                 </div>
                 <div class="pie-chart-wrapper">
                     <div class="pie-chart-container" id="pieContainer">
-                        <svg class="pie-chart-svg" viewBox="0 0 100 100" id="pieSvg">
-                            <!-- Segments will be generated by JS -->
-                        </svg>
+                        <svg class="pie-chart-svg" viewBox="0 0 100 100" id="pieSvg"></svg>
                         <div class="pie-center">
                             <div class="pie-center-value" id="pieCenterValue">₹0</div>
                             <div class="pie-center-label">Total Spent</div>
                         </div>
                         <div class="pie-tooltip" id="pieTooltip"></div>
                     </div>
-                    <div class="pie-legend" id="pieLegend">
-                        <!-- Legend items will be generated by JS -->
-                    </div>
+                    <div class="pie-legend" id="pieLegend"></div>
                 </div>
             </div>
 
-            <!-- Monthly Trend -->
             <div class="chart-container">
                 <div class="chart-header">
                     <h3 class="chart-title">Monthly Trend</h3>
@@ -988,49 +1181,49 @@
                     <div class="bar-item">
                         <div class="bar-value" id="barVal1">₹0</div>
                         <div class="bar-track"><div class="bar-fill" id="barFill1"></div></div>
-                        <div class="bar-label">Jan</div>
+                        <div class="bar-label" id="barLabel1">-</div>
                     </div>
                     <div class="bar-item">
                         <div class="bar-value" id="barVal2">₹0</div>
                         <div class="bar-track"><div class="bar-fill" id="barFill2"></div></div>
-                        <div class="bar-label">Feb</div>
+                        <div class="bar-label" id="barLabel2">-</div>
                     </div>
                     <div class="bar-item">
                         <div class="bar-value" id="barVal3">₹0</div>
                         <div class="bar-track"><div class="bar-fill" id="barFill3"></div></div>
-                        <div class="bar-label">Mar</div>
+                        <div class="bar-label" id="barLabel3">-</div>
                     </div>
                     <div class="bar-item">
                         <div class="bar-value" id="barVal4">₹0</div>
                         <div class="bar-track"><div class="bar-fill" id="barFill4"></div></div>
-                        <div class="bar-label">Apr</div>
+                        <div class="bar-label" id="barLabel4">-</div>
                     </div>
                     <div class="bar-item">
                         <div class="bar-value" id="barVal5">₹0</div>
                         <div class="bar-track"><div class="bar-fill" id="barFill5"></div></div>
-                        <div class="bar-label">May</div>
+                        <div class="bar-label" id="barLabel5">-</div>
                     </div>
                     <div class="bar-item">
                         <div class="bar-value" id="barVal6">₹0</div>
                         <div class="bar-track"><div class="bar-fill" id="barFill6"></div></div>
-                        <div class="bar-label">Jun</div>
+                        <div class="bar-label" id="barLabel6">-</div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Recommendations -->
         <div class="recommendations-section">
             <div class="section-header">
                 <h2>Recommended Cards For You</h2>
                 <p>Based on your spending pattern, these cards could earn you more rewards</p>
             </div>
-            <div class="recommendation-cards" id="recommendationCards">
-                <!-- Cards will be inserted here -->
+            <div class="eligibility-notice">
+                <strong>Important:</strong> Eligibility criteria (age, income, credit score) are based on publicly stated requirements. 
+                Final approval is solely at the issuing bank's discretion. SpendWise does not guarantee approval.
             </div>
+            <div class="recommendation-cards" id="recommendationCards"></div>
         </div>
 
-        <!-- Transactions -->
         <div class="transactions-section">
             <div class="section-header">
                 <h2>Recent Transactions</h2>
@@ -1042,178 +1235,676 @@
                 <div class="table-header-cell">Date</div>
                 <div class="table-header-cell">Amount</div>
             </div>
-            <div id="transactionsList">
-                <!-- Transactions will be inserted here -->
-            </div>
+            <div id="transactionsList"></div>
         </div>
     </div>
 
-    <!-- Toast -->
+    <div class="legal-disclaimer">
+        <p>
+            <strong>Disclaimer:</strong> SpendWise provides informational analysis based on publicly available reward structures. 
+            Reward calculations are estimates based on your uploaded statement data. Actual rewards may vary based on 
+            merchant MCC codes, bank promotions, and specific card terms. Final approval and card terms are decided 
+            solely by issuing banks. SpendWise is not a financial advisor—please verify all rates with official bank sources.
+        </p>
+    </div>
+
     <div id="toast"></div>
 
-    <!-- Scripts -->
     <script src="js/main.js"></script>
     <script>
-        // Format currency
-        function formatCurrency(amount) {
-            if (!amount || amount === 0) return '₹0';
-            return '₹' + Math.round(amount).toLocaleString('en-IN');
+
+        // ============================================
+        // DATA NORMALIZATION LAYER
+        // ============================================
+
+        function extractPercentage(value) {
+            if (typeof value === 'string' && value.includes('%')) {
+                const num = parseFloat(value.replace('%', '').trim());
+                return isNaN(num) ? null : num / 100;
+            }
+            return null;
         }
 
-        // Show toast
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            if (!toast) return;
-            toast.textContent = message;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
+        function extractRP(value, pointValue) {
+            if (!pointValue || typeof value !== 'string') return null;
+
+            const rpPerSpendMatch = value.match(/(\d+(?:\.\d+)?)\s*RP\/₹(\d+)/i);
+            if (rpPerSpendMatch) {
+                const rp = parseFloat(rpPerSpendMatch[1]);
+                const spend = parseFloat(rpPerSpendMatch[2]);
+                return (rp * pointValue) / spend;
+            }
+
+            const rpMatch = value.match(/(\d+(?:\.\d+)?)\s*(?:RP|X)/i);
+            if (rpMatch) {
+                const rp = parseFloat(rpMatch[1]);
+                return (rp * pointValue) / 100;
+            }
+
+            return null;
         }
 
-        // RESET ANALYSIS FUNCTION - This is what was missing!
-        function resetAnalysis() {
-            // Clear localStorage
-            localStorage.removeItem('cardmax_analysis');
-            localStorage.removeItem('cardmax_selected_card');
-            
-            // Reset UI state
-            selectedCardId = null;
-            
-            // Hide dashboard
-            document.getElementById('dashboardMain').classList.remove('active');
-            document.getElementById('dashboardMain').style.display = 'none';
-            
-            // Show upload section
-            document.getElementById('uploadSection').style.display = 'flex';
-            
-            // Reset card selection
-            document.querySelectorAll('.card-select').forEach(el => el.classList.remove('selected'));
-            
-            // Hide upload zone
-            document.getElementById('uploadZone').classList.remove('active');
-            
-            // Reset upload zone content
-            document.getElementById('uploadZone').innerHTML = `
-                <div class="upload-icon">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                        <polyline points="17 8 12 3 7 8"/>
-                        <line x1="12" y1="3" x2="12" y2="15"/>
-                    </svg>
-                </div>
-                <div class="upload-text">Drop your statement here</div>
-                <div class="upload-subtitle">or click to browse (PDF, CSV, Excel)</div>
-            `;
-            
-            // Clear stats
-            document.getElementById('statTotal').textContent = '₹0';
-            document.getElementById('statMissed').textContent = '₹0';
-            document.getElementById('statSavings').textContent = '₹0';
-            document.getElementById('statTxns').textContent = '0';
-            document.getElementById('pieCenterValue').textContent = '₹0';
-            
-            // Clear charts
-            document.getElementById('pieSvg').innerHTML = '';
-            document.getElementById('pieLegend').innerHTML = '';
-            
-            // Reset bar chart
-            for (let i = 1; i <= 6; i++) {
-                const fill = document.getElementById('barFill' + i);
-                const val = document.getElementById('barVal' + i);
-                if (fill) fill.style.height = '0%';
-                if (val) {
-                    val.textContent = '₹0';
-                    val.classList.remove('show');
+        function normalizeCard(rawCard) {
+            const pointValue = parseFloat(rawCard.point_value) || 1;
+
+            const normalized = {
+                card_id: rawCard.card_id,
+                card_name: rawCard.card_name,
+                bank: rawCard.bank,
+                annual_fee: parseFloat(rawCard.annual_fee) || 0,
+                reward_model: rawCard.reward_model || 'cashback',
+                point_value: pointValue,
+                categories: {},
+                caps: rawCard.caps || {},
+                forex_markup: parseFloat(rawCard.forex_markup) || 0.035,
+                lounge: parseInt(rawCard.lounge) || 0,
+                redemption_multiplier: rawCard.redemption_multiplier || { cash: 1.0, travel: 1.0 },
+                eligibility: rawCard.eligibility || {
+                    min_age: 21,
+                    min_income: 20000,
+                    min_cibil: 650
+                }
+            };
+
+            if (rawCard.categories) {
+                for (const [cat, value] of Object.entries(rawCard.categories)) {
+                    let rate = extractPercentage(value);
+                    if (rate === null) {
+                        rate = extractRP(value, pointValue);
+                    }
+                    if (rate === null && !isNaN(parseFloat(value))) {
+                        rate = parseFloat(value);
+                    }
+                    if (rate !== null) {
+                        normalized.categories[cat] = rate;
+                    }
                 }
             }
-            
-            // Clear recommendations and transactions
-            document.getElementById('recommendationCards').innerHTML = '';
-            document.getElementById('transactionsList').innerHTML = '';
-            
-            // Scroll to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            
-            showToast('Ready for new analysis');
+
+            return normalized;
         }
 
-        // Card selection
+        const RAW_CARD_DATABASE = [
+            {
+                card_id: "sbi_simplyclick",
+                card_name: "SBI SimplyCLICK",
+                bank: "SBI Card",
+                annual_fee: 499,
+                reward_model: "points",
+                point_value: 0.20,
+                categories: {
+                    online_partners: "10 RP/₹100",
+                    online: "5 RP/₹100",
+                    general: "1 RP/₹100"
+                },
+                caps: { online_monthly: 10000 },
+                forex_markup: 0.035,
+                lounge: 0,
+                redemption_multiplier: { cash: 0.8, travel: 1.0 },
+                eligibility: { min_age: 18, min_income: 20000, min_cibil: 650 }
+            },
+            {
+                card_id: "sbi_cashback",
+                card_name: "SBI Cashback Card",
+                bank: "SBI Card",
+                annual_fee: 999,
+                reward_model: "cashback",
+                point_value: 1,
+                categories: { online: "0.05", general: "0.01" },
+                caps: { online_monthly: 5000 },
+                forex_markup: 0.035,
+                lounge: 0,
+                redemption_multiplier: { cash: 1.0, travel: 1.0 },
+                eligibility: { min_age: 18, min_income: 25000, min_cibil: 700 }
+            },
+            {
+                card_id: "hdfc_swiggy",
+                card_name: "HDFC Swiggy",
+                bank: "HDFC Bank",
+                annual_fee: 500,
+                reward_model: "cashback",
+                point_value: 1,
+                categories: { food_dining: "0.10", online: "0.05", general: "0.01" },
+                caps: { food_dining_monthly: 1500 },
+                forex_markup: 0.035,
+                lounge: 0,
+                redemption_multiplier: { cash: 1.0, travel: 1.0 },
+                eligibility: { min_age: 21, min_income: 25000, min_cibil: 700 }
+            },
+            {
+                card_id: "hdfc_millennia",
+                card_name: "HDFC Millennia",
+                bank: "HDFC Bank",
+                annual_fee: 1000,
+                reward_model: "cashback",
+                point_value: 1,
+                categories: { shopping: "0.05", general: "0.01" },
+                caps: { shopping_monthly: 1000 },
+                forex_markup: 0.035,
+                lounge: 0,
+                redemption_multiplier: { cash: 1.0, travel: 1.0 },
+                eligibility: { min_age: 21, min_income: 30000, min_cibil: 700 }
+            },
+            {
+                card_id: "hdfc_infinia",
+                card_name: "HDFC Infinia Metal",
+                bank: "HDFC Bank",
+                annual_fee: 12500,
+                reward_model: "points",
+                point_value: 1.0,
+                categories: {
+                    general: "0.033",
+                    smartbuy_hotels: "0.10",
+                    smartbuy_flights: "0.05",
+                    smartbuy_vouchers: "0.05"
+                },
+                caps: { general_monthly: 15000, smartbuy_monthly: 15000 },
+                forex_markup: 0.02,
+                lounge: 999,
+                redemption_multiplier: { cash: 0.5, travel: 1.0 },
+                eligibility: { min_age: 21, min_income: 120000, min_cibil: 750 }
+            },
+            {
+                card_id: "axis_flipkart",
+                card_name: "Axis Flipkart",
+                bank: "Axis Bank",
+                annual_fee: 500,
+                reward_model: "cashback",
+                point_value: 1,
+                categories: {
+                    shopping_myntra: "0.075",
+                    shopping_flipkart: "0.05",
+                    shopping_cleartrip: "0.05",
+                    preferred: "0.04",
+                    general: "0.01"
+                },
+                caps: { shopping_quarterly: 4000 },
+                forex_markup: 0.035,
+                lounge: 0,
+                redemption_multiplier: { cash: 1.0, travel: 1.0 },
+                eligibility: { min_age: 18, min_income: 15000, min_cibil: 650 }
+            },
+            {
+                card_id: "axis_ace",
+                card_name: "Axis ACE",
+                bank: "Axis Bank",
+                annual_fee: 499,
+                reward_model: "cashback",
+                point_value: 1,
+                categories: { utilities: "0.05", food_dining: "0.04", general: "0.02" },
+                caps: { utilities_monthly: 500 },
+                forex_markup: 0.035,
+                lounge: 0,
+                redemption_multiplier: { cash: 1.0, travel: 1.0 },
+                eligibility: { min_age: 18, min_income: 20000, min_cibil: 650 }
+            },
+            {
+                card_id: "axis_magnus",
+                card_name: "Axis Magnus",
+                bank: "Axis Bank",
+                annual_fee: 12500,
+                reward_model: "points",
+                point_value: 0.20,
+                categories: { general: "0.012" },
+                caps: { general_monthly: 15000 },
+                forex_markup: 0.02,
+                lounge: 999,
+                redemption_multiplier: { cash: 0.8, travel: 1.0 },
+                eligibility: { min_age: 18, min_income: 100000, min_cibil: 750 }
+            },
+            {
+                card_id: "icici_amazon",
+                card_name: "ICICI Amazon Pay",
+                bank: "ICICI Bank",
+                annual_fee: 0,
+                reward_model: "cashback",
+                point_value: 1,
+                categories: { shopping: "0.05", general: "0.01" },
+                caps: { shopping_monthly: 1500 },
+                forex_markup: 0.035,
+                lounge: 0,
+                redemption_multiplier: { cash: 1.0, travel: 1.0 },
+                eligibility: { min_age: 18, min_income: 25000, min_cibil: 650 }
+            },
+            {
+                card_id: "icici_coral",
+                card_name: "ICICI Coral",
+                bank: "ICICI Bank",
+                annual_fee: 500,
+                reward_model: "points",
+                point_value: 0.25,
+                categories: { food_dining: "0.025", general: "0.01" },
+                caps: {},
+                forex_markup: 0.035,
+                lounge: 1,
+                redemption_multiplier: { cash: 1.0, travel: 1.0 },
+                eligibility: { min_age: 21, min_income: 30000, min_cibil: 700 }
+            },
+            {
+                card_id: "idfc_millennia",
+                card_name: "IDFC FIRST Millennia",
+                bank: "IDFC FIRST Bank",
+                annual_fee: 0,
+                reward_model: "points",
+                point_value: 0.25,
+                categories: { online: "0.025", general: "0.01" },
+                caps: {},
+                forex_markup: 0.035,
+                lounge: 0,
+                redemption_multiplier: { cash: 1.0, travel: 1.0 },
+                eligibility: { min_age: 18, min_income: 20000, min_cibil: 650 }
+            },
+            {
+                card_id: "idfc_wealth",
+                card_name: "IDFC FIRST Wealth",
+                bank: "IDFC FIRST Bank",
+                annual_fee: 0,
+                reward_model: "points",
+                point_value: 0.25,
+                categories: { general: "0.025" },
+                caps: {},
+                forex_markup: 0.015,
+                lounge: 4,
+                redemption_multiplier: { cash: 1.0, travel: 1.0 },
+                eligibility: { min_age: 18, min_income: 50000, min_cibil: 700 }
+            },
+            {
+                card_id: "kotak_811",
+                card_name: "Kotak 811 #DreamDifferent",
+                bank: "Kotak Mahindra",
+                annual_fee: 499,
+                reward_model: "cashback",
+                point_value: 1,
+                categories: { general: "0.01" },
+                caps: {},
+                forex_markup: 0.035,
+                lounge: 0,
+                redemption_multiplier: { cash: 1.0, travel: 1.0 },
+                eligibility: { min_age: 18, min_income: 15000, min_cibil: 650 }
+            },
+            {
+                card_id: "kotak_myntra",
+                card_name: "Myntra Kotak",
+                bank: "Kotak Mahindra",
+                annual_fee: 500,
+                reward_model: "cashback",
+                point_value: 1,
+                categories: { shopping: "0.10", general: "0.01" },
+                caps: { shopping_monthly: 1000 },
+                forex_markup: 0.035,
+                lounge: 0,
+                redemption_multiplier: { cash: 1.0, travel: 1.0 },
+                eligibility: { min_age: 18, min_income: 20000, min_cibil: 650 }
+            },
+            {
+                card_id: "amex_smartearn",
+                card_name: "Amex SmartEarn",
+                bank: "American Express",
+                annual_fee: 495,
+                reward_model: "points",
+                point_value: 0.25,
+                categories: { shopping: "0.05", general: "0.01" },
+                caps: { shopping_monthly: 250 },
+                forex_markup: 0.035,
+                lounge: 0,
+                redemption_multiplier: { cash: 0.8, travel: 1.0 },
+                eligibility: { min_age: 18, min_income: 40000, min_cibil: 700 }
+            },
+            {
+                card_id: "amex_mrcc",
+                card_name: "Amex MRCC",
+                bank: "American Express",
+                annual_fee: 4500,
+                reward_model: "points",
+                point_value: 0.40,
+                categories: { general: "0.01" },
+                caps: {},
+                forex_markup: 0.035,
+                lounge: 0,
+                redemption_multiplier: { cash: 0.7, travel: 1.0 },
+                eligibility: { min_age: 18, min_income: 60000, min_cibil: 750 }
+            },
+            {
+                card_id: "rbl_shoprite",
+                card_name: "RBL Shoprite",
+                bank: "RBL Bank",
+                annual_fee: 500,
+                reward_model: "points",
+                point_value: 0.25,
+                categories: { shopping: "0.01", general: "0.01" },
+                caps: {},
+                forex_markup: 0.035,
+                lounge: 0,
+                redemption_multiplier: { cash: 1.0, travel: 1.0 },
+                eligibility: { min_age: 18, min_income: 20000, min_cibil: 650 }
+            },
+            {
+                card_id: "other",
+                card_name: "Other / Not Listed",
+                bank: "Other",
+                annual_fee: 0,
+                reward_model: "cashback",
+                point_value: 1,
+                categories: { general: "0.01" },
+                caps: {},
+                forex_markup: 0.035,
+                lounge: 0,
+                redemption_multiplier: { cash: 1.0, travel: 1.0 },
+                eligibility: { min_age: 18, min_income: 0, min_cibil: 0 }
+            }
+        ];
+
+        const CARD_DATABASE_NORMALIZED = {};
+        RAW_CARD_DATABASE.forEach(card => {
+            CARD_DATABASE_NORMALIZED[card.card_id] = normalizeCard(card);
+        });
+
+        const CARD_DATABASE = {};
+        RAW_CARD_DATABASE.forEach(card => {
+            if (!CARD_DATABASE[card.bank]) {
+                CARD_DATABASE[card.bank] = [];
+            }
+            CARD_DATABASE[card.bank].push({
+                id: card.card_id,
+                name: card.card_name,
+                type: card.reward_model === 'cashback' ? 'Cashback' : 'Rewards',
+                rewards: Object.entries(card.categories).map(([k, v]) => {
+                    const rate = extractPercentage(v) || extractRP(v, card.point_value) || parseFloat(v);
+                    return `${(rate * 100).toFixed(0)}% ${k}`;
+                }).join(', ')
+            });
+        });
+
+        function applyCaps(reward, capData, spendAmount) {
+            if (!capData) return reward;
+            if (capData.monthly_limit !== undefined && reward > capData.monthly_limit) {
+                return capData.monthly_limit;
+            }
+            if (capData.quarterly_limit !== undefined) {
+                const monthlyFromQuarterly = capData.quarterly_limit / 3;
+                if (reward > monthlyFromQuarterly) {
+                    return monthlyFromQuarterly;
+                }
+            }
+            if (capData.max_percent !== undefined) {
+                const maxReward = spendAmount * capData.max_percent;
+                if (reward > maxReward) {
+                    return maxReward;
+                }
+            }
+            return reward;
+        }
+
+        function applyRedemptionMultiplier(rawReward, card, redemptionMethod) {
+            if (!card.redemption_multiplier) return rawReward;
+            const multiplier = card.redemption_multiplier[redemptionMethod] || 1.0;
+            return rawReward * multiplier;
+        }
+
+        function calculateCardRewards(cardId, categoryTotals, redemptionMethod) {
+            const card = CARD_DATABASE_NORMALIZED[cardId] || CARD_DATABASE_NORMALIZED['other'];
+            let monthlyRewards = 0;
+            let categoryBreakdown = {};
+            let totalCapped = false;
+
+            for (const [category, amount] of Object.entries(categoryTotals)) {
+                let rate = card.categories[category] || card.categories['general'] || 0.01;
+                let reward = amount * rate;
+                let capped = false;
+
+                const capKey = `${category}_monthly`;
+                if (card.caps && card.caps[capKey]) {
+                    const beforeCap = reward;
+                    reward = Math.min(reward, card.caps[capKey]);
+                    if (reward < beforeCap) capped = true;
+                }
+
+                reward = applyRedemptionMultiplier(reward, card, redemptionMethod);
+                monthlyRewards += reward;
+                categoryBreakdown[category] = {
+                    spend: amount,
+                    rate: rate,
+                    raw_reward: amount * rate,
+                    reward: reward,
+                    capped: capped,
+                    redemption_method: redemptionMethod
+                };
+            }
+
+            if (card.caps && card.caps.general_monthly) {
+                if (monthlyRewards > card.caps.general_monthly) {
+                    monthlyRewards = card.caps.general_monthly;
+                    totalCapped = true;
+                }
+            }
+
+            const annualRewards = monthlyRewards * 12;
+            const netBenefit = annualRewards - card.annual_fee;
+
+            return {
+                card_id: card.card_id,
+                card_name: card.card_name,
+                annual_fee: card.annual_fee,
+                monthly_rewards: monthlyRewards,
+                annual_rewards: annualRewards,
+                net_annual_benefit: netBenefit,
+                category_breakdown: categoryBreakdown,
+                total_capped: totalCapped,
+                forex_markup: card.forex_markup,
+                eligibility: card.eligibility
+            };
+        }
+
+        function checkEligibility(card, userProfile) {
+            const defaults = { age: 25, income: 50000, cibil: 700 };
+            const profile = Object.assign({}, defaults, userProfile);
+
+            const warnings = [];
+
+            if (profile.age < card.eligibility.min_age) {
+                warnings.push(`Minimum age requirement: ${card.eligibility.min_age}+ years`);
+            }
+
+            if (profile.income < card.eligibility.min_income) {
+                warnings.push(`Income requirement: ₹${card.eligibility.min_income.toLocaleString('en-IN')}+/month`);
+            }
+
+            if (profile.cibil < card.eligibility.min_cibil) {
+                warnings.push(`Credit score: ${card.eligibility.min_cibil}+ recommended`);
+            }
+
+            return {
+                eligible: true,
+                warnings: warnings,
+                disclaimer: "Final approval is solely at the issuing bank's discretion."
+            };
+        }
+
+        function scoreCard(card, spending, userProfile) {
+            const rewards = calculateCardRewards(card.card_id, spending, 'cash');
+            let score = rewards.net_annual_benefit;
+
+            if (spending.international) {
+                const forexPenalty = spending.international * card.forex_markup * 12;
+                score -= forexPenalty;
+            }
+
+            const eligibility = checkEligibility(card, userProfile);
+            if (eligibility.warnings.length > 0) {
+                score *= 0.8;
+            }
+
+            if (card.annual_fee === 0) {
+                score += 500;
+            }
+
+            return {
+                score: score,
+                rewards: rewards,
+                eligibility: eligibility
+            };
+        }
+
+        function findBestCards(categoryTotals, userProfile) {
+            const results = [];
+
+            for (const [cardId, card] of Object.entries(CARD_DATABASE_NORMALIZED)) {
+                const scored = scoreCard(card, categoryTotals, userProfile);
+                results.push({
+                    card_id: cardId,
+                    card: card,
+                    card_name: card.card_name,
+                    annual_fee: card.annual_fee,
+                    monthly_rewards: scored.rewards.monthly_rewards,
+                    annual_rewards: scored.rewards.annual_rewards,
+                    net_annual_benefit: scored.rewards.net_annual_benefit,
+                    score: scored.score,
+                    eligibility: scored.eligibility
+                });
+            }
+
+            results.sort((a, b) => b.score - a.score);
+            return results;
+        }
+
+        const BANK_COLORS = {
+            "SBI Card": "bank-sbi",
+            "HDFC Bank": "bank-hdfc",
+            "Axis Bank": "bank-axis",
+            "ICICI Bank": "bank-icici",
+            "IDFC FIRST Bank": "bank-idfc",
+            "Kotak Mahindra": "bank-kotak",
+            "American Express": "bank-amex",
+            "RBL Bank": "bank-rbl",
+            "Other": "bank-other"
+        };
+
+        let selectedBank = null;
+        let selectedCard = null;
         let selectedCardId = null;
 
-        function selectCard(id, name, element) {
-            selectedCardId = id;
-            
-            // Update UI
-            document.querySelectorAll('.card-select').forEach(el => el.classList.remove('selected'));
-            element.classList.add('selected');
-            
-            // Show upload zone
-            document.getElementById('uploadZone').classList.add('active');
-            
-            // Save to localStorage
-            localStorage.setItem('cardmax_selected_card', id);
-            
-            showToast(`Selected: ${name}`);
-        }
-
-        // Upload handling
-        const uploadZone = document.getElementById('uploadZone');
-        const fileInput = document.getElementById('fileInput');
-
-        if (uploadZone) {
-            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-                uploadZone.addEventListener(eventName, preventDefaults, false);
-            });
-
-            function preventDefaults(e) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-
-            ['dragenter', 'dragover'].forEach(eventName => {
-                uploadZone.addEventListener(eventName, () => {
-                    uploadZone.classList.add('dragover');
-                });
-            });
-
-            ['dragleave', 'drop'].forEach(eventName => {
-                uploadZone.addEventListener(eventName, () => {
-                    uploadZone.classList.remove('dragover');
-                });
-            });
-
-            uploadZone.addEventListener('drop', (e) => {
-                const dt = e.dataTransfer;
-                const files = dt.files;
-                if (files.length) handleFile(files[0]);
-            });
-
-            uploadZone.addEventListener('click', () => {
-                if (!selectedCardId) {
-                    showToast('Please select a card first');
-                    return;
+        document.addEventListener('DOMContentLoaded', () => {
+            populateBankDropdown();
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.custom-dropdown')) {
+                    closeAllDropdowns();
                 }
-                fileInput.click();
             });
+            document.getElementById('fileInput').addEventListener('change', handleFileSelect);
+        });
+
+        function populateBankDropdown() {
+            const menu = document.getElementById('bankMenu');
+            const banks = Object.keys(CARD_DATABASE).sort((a, b) => {
+                if (a === "Other") return 1;
+                if (b === "Other") return -1;
+                return a.localeCompare(b);
+            });
+
+            menu.innerHTML = banks.map(bank => `
+                <div class="dropdown-item" onclick="selectBank('${bank}')">
+                    <div style="display: flex; align-items: center;">
+                        <div class="bank-indicator ${BANK_COLORS[bank] || 'bank-other'}"></div>
+                        <div class="item-main">
+                            <span class="item-title">${bank}</span>
+                            <span class="item-subtitle">${CARD_DATABASE[bank].length} cards</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
         }
 
-        if (fileInput) {
-            fileInput.addEventListener('change', (e) => {
-                if (e.target.files.length) handleFile(e.target.files[0]);
-            });
+        function toggleDropdown(type) {
+            const menu = document.getElementById(type + 'Menu');
+            const trigger = document.querySelector(`#${type}Dropdown .dropdown-trigger`);
+            const isOpen = menu.classList.contains('open');
+            closeAllDropdowns();
+            if (!isOpen) {
+                menu.classList.add('open');
+                trigger.classList.add('active');
+            }
+        }
+
+        function closeAllDropdowns() {
+            document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('open'));
+            document.querySelectorAll('.dropdown-trigger').forEach(t => t.classList.remove('active'));
+        }
+
+        function selectBank(bank) {
+            selectedBank = bank;
+            selectedCard = null;
+            selectedCardId = null;
+            document.getElementById('bankPlaceholder').textContent = bank;
+            document.getElementById('bankPlaceholder').classList.remove('placeholder');
+            closeAllDropdowns();
+            document.getElementById('stepCard').classList.add('active');
+            populateCardDropdown(bank);
+            document.getElementById('cardPlaceholder').textContent = 'Choose your card...';
+            document.getElementById('cardPlaceholder').classList.add('placeholder');
+            document.getElementById('selectedCardDisplay').classList.remove('active');
+            document.getElementById('uploadZone').classList.remove('active');
+            showToast(`${bank} selected — now choose your card`);
+        }
+
+        function populateCardDropdown(bank) {
+            const menu = document.getElementById('cardMenu');
+            const cards = CARD_DATABASE[bank] || [];
+            menu.innerHTML = cards.map((card, idx) => `
+                <div class="dropdown-item" onclick="selectCard('${bank}', ${idx})">
+                    <div class="item-main">
+                        <span class="item-title">${card.name}</span>
+                        <span class="item-subtitle">${card.type} • ${card.rewards}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function selectCard(bank, cardIndex) {
+            const card = CARD_DATABASE[bank][cardIndex];
+            selectedCard = card;
+            selectedCardId = card.id;
+            document.getElementById('cardPlaceholder').textContent = card.name;
+            document.getElementById('cardPlaceholder').classList.remove('placeholder');
+            closeAllDropdowns();
+            document.getElementById('displayBank').textContent = bank;
+            document.getElementById('displayCard').textContent = card.name;
+            document.getElementById('displayType').textContent = `${card.type} • ${card.rewards}`;
+            document.getElementById('selectedCardDisplay').classList.add('active');
+            document.getElementById('uploadZone').classList.add('active');
+            localStorage.setItem('cardmax_selected_bank', bank);
+            localStorage.setItem('cardmax_selected_card', JSON.stringify(card));
+            localStorage.setItem('cardmax_selected_card_id', card.id);
+            showToast(`${card.name} selected — upload your statement`);
+        }
+
+        function resetSelection() {
+            selectedBank = null;
+            selectedCard = null;
+            selectedCardId = null;
+            document.getElementById('bankPlaceholder').textContent = 'Choose your bank...';
+            document.getElementById('bankPlaceholder').classList.add('placeholder');
+            document.getElementById('stepCard').classList.remove('active');
+            document.getElementById('selectedCardDisplay').classList.remove('active');
+            document.getElementById('uploadZone').classList.remove('active');
+            localStorage.removeItem('cardmax_selected_bank');
+            localStorage.removeItem('cardmax_selected_card');
+            localStorage.removeItem('cardmax_selected_card_id');
+            showToast('Selection reset — start over');
+        }
+
+        function handleFileSelect(e) {
+            if (e.target.files.length) handleFile(e.target.files[0]);
         }
 
         async function handleFile(file) {
             if (!file) return;
-            
             const allowed = ['.csv', '.xlsx', '.xls', '.pdf'];
             const ext = '.' + file.name.split('.').pop().toLowerCase();
-            
             if (!allowed.includes(ext)) {
                 showToast('Please upload CSV, Excel, or PDF');
                 return;
             }
-
-            // Show loading
+            const uploadZone = document.getElementById('uploadZone');
             uploadZone.innerHTML = `
                 <div class="upload-loading">
                     <div class="spinner"></div>
@@ -1221,29 +1912,24 @@
                     <div class="upload-subtitle">This may take a few moments</div>
                 </div>
             `;
-
             try {
                 const formData = new FormData();
                 formData.append('file', file);
                 if (selectedCardId) {
                     formData.append('card_id', selectedCardId);
                 }
-
-                const API_BASE_URL = window.location.hostname === 'localhost' 
+                const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
                     ? 'http://localhost:8000' 
                     : window.location.origin;
-
                 const response = await fetch(`${API_BASE_URL}/api/analyze`, {
                     method: 'POST',
-                    body: formData
+                    body: formData,
                 });
-
                 if (!response.ok) {
-                    throw new Error(`Upload failed: ${response.status}`);
+                    const errorData = await response.json().catch(() => ({}));
+                    throw new Error(errorData.error || `Upload failed: ${response.status}`);
                 }
-
                 const result = await response.json();
-
                 if (result.success) {
                     localStorage.setItem('cardmax_analysis', JSON.stringify(result.data));
                     showDashboard(result.data);
@@ -1252,74 +1938,114 @@
                     throw new Error(result.error || 'Analysis failed');
                 }
             } catch (error) {
-                console.error('Error:', error);
+                console.error('Upload error:', error);
                 showToast('Error: ' + error.message);
-                // Reset upload zone
-                uploadZone.innerHTML = `
-                    <div class="upload-icon">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                            <polyline points="17 8 12 3 7 8"/>
-                            <line x1="12" y1="3" x2="12" y2="15"/>
-                        </svg>
-                    </div>
-                    <div class="upload-text">Drop your statement here</div>
-                    <div class="upload-subtitle">or click to browse (PDF, CSV, Excel)</div>
-                `;
+                setTimeout(() => {
+                    uploadZone.innerHTML = `
+                        <div class="upload-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="17 8 12 3 7 8"/>
+                                <line x1="12" y1="3" x2="12" y2="15"/>
+                            </svg>
+                        </div>
+                        <div class="upload-text">Drop your statement here</div>
+                        <div class="upload-subtitle">or click to browse (PDF, CSV, Excel)</div>
+                    `;
+                }, 3000);
             }
         }
 
-        // Show dashboard with data
+        const uploadZone = document.getElementById('uploadZone');
+        if (uploadZone) {
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                uploadZone.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                });
+            });
+            ['dragenter', 'dragover'].forEach(eventName => {
+                uploadZone.addEventListener(eventName, () => {
+                    uploadZone.classList.add('dragover');
+                });
+            });
+            ['dragleave', 'drop'].forEach(eventName => {
+                uploadZone.addEventListener(eventName, () => {
+                    uploadZone.classList.remove('dragover');
+                });
+            });
+            uploadZone.addEventListener('drop', (e) => {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                if (files.length) handleFile(files[0]);
+            });
+            uploadZone.addEventListener('click', () => {
+                document.getElementById('fileInput').click();
+            });
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function formatCurrency(amount) {
+            if (!amount || amount === 0) return '₹0';
+            return '₹' + Math.round(amount).toLocaleString('en-IN');
+        }
+
         function showDashboard(data) {
-            // Hide upload, show dashboard
             document.getElementById('uploadSection').style.display = 'none';
-            document.getElementById('dashboardMain').style.display = 'block';
-            document.getElementById('dashboardMain').classList.add('active');
+            const dashboard = document.getElementById('dashboardMain');
+            dashboard.style.display = 'block';
+            dashboard.classList.add('active');
 
             const totals = data.totals || {};
             const categoryTotals = data.category_totals || {};
             const transactions = data.transactions || [];
-            const bestCards = data.best_cards || [];
 
             const totalSpend = totals.total_spend || 0;
-            const missedRewards = totalSpend * 0.02;
-            const annualSavings = missedRewards * 12;
+            const currentCardId = localStorage.getItem('cardmax_selected_card_id') || 'other';
 
-            // Update stats
+            const userCardRewards = calculateCardRewards(currentCardId, categoryTotals, 'cash');
+            const allCards = findBestCards(categoryTotals);
+            const bestCard = allCards[0];
+
+            const missedRewardsMonthly = Math.max(0, bestCard.monthly_rewards - userCardRewards.monthly_rewards);
+            const missedRewardsAnnual = missedRewardsMonthly * 12;
+
             document.getElementById('statTotal').textContent = formatCurrency(totalSpend);
-            document.getElementById('statMissed').textContent = formatCurrency(missedRewards);
-            document.getElementById('statSavings').textContent = formatCurrency(annualSavings);
+            document.getElementById('statMissed').textContent = formatCurrency(missedRewardsAnnual);
+            document.getElementById('statMissed').style.color = missedRewardsAnnual > 0 ? 'var(--red)' : 'var(--green)';
+            document.getElementById('statSavings').textContent = formatCurrency(Math.max(0, bestCard.net_annual_benefit));
             document.getElementById('statTxns').textContent = totals.transaction_count || 0;
-
-            // Update pie center
             document.getElementById('pieCenterValue').textContent = formatCurrency(totalSpend);
 
-            // Create pie chart
             createPieChart(categoryTotals);
-
-            // Animate bar chart
-            animateBarChart();
-
-            // Render recommendations
-            renderRecommendations(bestCards);
-
-            // Render transactions
+            renderRealMonthlyTrend(transactions);
+            renderRealRecommendations(allCards.slice(0, 3), userCardRewards, bestCard);
             renderTransactions(transactions);
-            
-            // Scroll to dashboard
-            document.getElementById('dashboardMain').scrollIntoView({ behavior: 'smooth' });
+
+            dashboard.scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Create pie chart with segments
         function createPieChart(categories) {
-            if (!categories || Object.keys(categories).length === 0) return;
+            if (!categories || Object.keys(categories).length === 0) {
+                document.getElementById('pieLegend').innerHTML = '<div style="color: var(--text-light); text-align: center; padding: 40px;">No spending data available</div>';
+                return;
+            }
 
             const sorted = Object.entries(categories)
                 .filter(([cat, amount]) => amount > 100 && cat !== 'CASHBACK')
                 .sort((a, b) => b[1] - a[1])
                 .slice(0, 5);
 
-            if (sorted.length === 0) return;
+            if (sorted.length === 0) {
+                document.getElementById('pieLegend').innerHTML = '<div style="color: var(--text-light); text-align: center; padding: 40px;">No spending data available</div>';
+                return;
+            }
 
             const total = sorted.reduce((sum, [, amount]) => sum + amount, 0);
             const colors = ['#d4a574', '#7c9a6b', '#8b7aa8', '#c45c4a', '#5c4d3c'];
@@ -1405,73 +2131,110 @@
             });
         }
 
-        // Animate bar chart
-        function animateBarChart() {
-            const bars = [
-                { fill: 'barFill1', val: 'barVal1' },
-                { fill: 'barFill2', val: 'barVal2' },
-                { fill: 'barFill3', val: 'barVal3' },
-                { fill: 'barFill4', val: 'barVal4' },
-                { fill: 'barFill5', val: 'barVal5' },
-                { fill: 'barFill6', val: 'barVal6' }
-            ];
+        function renderRealMonthlyTrend(transactions) {
+            const monthlyData = {};
 
-            const values = [45000, 52000, 38000, 61000, 48000, 55000];
-            const max = Math.max(...values);
+            transactions.forEach(t => {
+                if (t.type === 'Debit' && t.date) {
+                    const date = new Date(t.date);
+                    const monthKey = date.toLocaleString('en-IN', { month: 'short' });
+                    monthlyData[monthKey] = (monthlyData[monthKey] || 0) + (t.amount || 0);
+                }
+            });
 
-            bars.forEach((bar, i) => {
-                const fillEl = document.getElementById(bar.fill);
-                const valEl = document.getElementById(bar.val);
-                const value = values[i] || 0;
-                const height = max > 0 ? (value / max) * 100 : 0;
+            const sortedMonths = Object.entries(monthlyData)
+                .sort((a, b) => {
+                    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                    return months.indexOf(a[0]) - months.indexOf(b[0]);
+                })
+                .slice(-6);
 
-                setTimeout(() => {
-                    if (fillEl) fillEl.style.height = height + '%';
-                    if (valEl) {
-                        valEl.textContent = formatCurrency(value);
-                        valEl.classList.add('show');
+            const months = sortedMonths.map(([m]) => m);
+            const values = sortedMonths.map(([, v]) => v);
+            const max = Math.max(...values, 1);
+
+            const barIds = ['barFill1', 'barFill2', 'barFill3', 'barFill4', 'barFill5', 'barFill6'];
+            const valIds = ['barVal1', 'barVal2', 'barVal3', 'barVal4', 'barVal5', 'barVal6'];
+            const labelIds = ['barLabel1', 'barLabel2', 'barLabel3', 'barLabel4', 'barLabel5', 'barLabel6'];
+
+            for (let i = 0; i < 6; i++) {
+                const fill = document.getElementById(barIds[i]);
+                const val = document.getElementById(valIds[i]);
+                const label = document.getElementById(labelIds[i]);
+                if (fill) fill.style.height = '0%';
+                if (val) {
+                    val.textContent = '₹0';
+                    val.classList.remove('show');
+                }
+                if (label) label.textContent = '-';
+            }
+
+            months.forEach((month, i) => {
+                if (i < 6) {
+                    const height = (values[i] / max) * 100;
+                    const fill = document.getElementById(barIds[i]);
+                    const val = document.getElementById(valIds[i]);
+                    const label = document.getElementById(labelIds[i]);
+
+                    if (fill) {
+                        setTimeout(() => {
+                            fill.style.height = height + '%';
+                        }, i * 100);
                     }
-                }, i * 100);
+                    if (val) {
+                        val.textContent = formatCurrency(values[i]);
+                        val.classList.add('show');
+                    }
+                    if (label) label.textContent = month;
+                }
             });
         }
 
-        // Render recommendations
-        function renderRecommendations(bestCards) {
+        function renderRealRecommendations(topCards, userCard, bestCard) {
             const container = document.getElementById('recommendationCards');
 
-            if (!bestCards || bestCards.length === 0) {
-                container.innerHTML = '<p style="color: var(--text-light);">No recommendations available</p>';
+            if (!topCards || topCards.length === 0) {
+                container.innerHTML = '<p style="color: var(--text-light); text-align: center; padding: 40px;">No recommendations available</p>';
                 return;
             }
 
-            const cards = bestCards.slice(0, 3);
+            container.innerHTML = topCards.map((card, i) => {
+                const isUsersCard = card.card_name === userCard.card_name;
+                const isBest = i === 0;
+                const hasWarnings = card.eligibility && card.eligibility.warnings.length > 0;
 
-            container.innerHTML = cards.map((card, i) => `
-                <div class="rec-card ${i === 0 ? 'best' : ''}">
-                    <div class="rec-rank">${i + 1}</div>
-                    <div class="rec-name">${card.card_name}</div>
-                    <div class="rec-bank">Annual Fee: ${formatCurrency(card.annual_fee)}</div>
-                    <div class="rec-stats">
-                        <div class="rec-stat">
-                            <span class="rec-stat-value">${formatCurrency(card.monthly_rewards)}</span>
-                            <span class="rec-stat-label">Monthly</span>
+                return `
+                    <div class="rec-card ${isBest ? 'best' : ''} ${isUsersCard ? 'current' : ''}">
+                        ${isUsersCard ? '<div class="current-badge">YOUR CARD</div>' : ''}
+                        <div class="rec-rank">${i + 1}</div>
+                        <div class="rec-name">${card.card_name}</div>
+                        <div class="rec-bank">Annual Fee: ${formatCurrency(card.annual_fee)}</div>
+                        ${hasWarnings ? `
+                            <div style="font-size: 11px; color: var(--red); margin-bottom: 12px; padding: 8px; background: rgba(239, 68, 68, 0.1); border-radius: 6px;">
+                                ⚠️ ${card.eligibility.warnings[0]}
+                            </div>
+                        ` : ''}
+                        <div class="rec-stats">
+                            <div class="rec-stat">
+                                <span class="rec-stat-value">${formatCurrency(card.monthly_rewards)}</span>
+                                <span class="rec-stat-label">Monthly Rewards</span>
+                            </div>
+                            <div class="rec-stat">
+                                <span class="rec-stat-value ${card.net_annual_benefit > 0 ? 'positive' : ''}">${formatCurrency(card.net_annual_benefit)}</span>
+                                <span class="rec-stat-label">Net Annual Benefit</span>
+                            </div>
                         </div>
-                        <div class="rec-stat">
-                            <span class="rec-stat-value ${card.net_annual_benefit > 0 ? 'positive' : ''}">${formatCurrency(card.net_annual_benefit)}</span>
-                            <span class="rec-stat-label">Net Benefit</span>
-                        </div>
+                        <div class="rec-fee">Based on your spending pattern</div>
                     </div>
-                    <div class="rec-fee">Annual Rewards: ${formatCurrency(card.annual_rewards)}</div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
-        // Render transactions
         function renderTransactions(transactions) {
             const container = document.getElementById('transactionsList');
 
             if (!transactions || transactions.length === 0) {
-                container.innerHTML = '<div class="table-row"><div style="color: var(--text-light);">No transactions found</div></div>';
+                container.innerHTML = '<div style="color: var(--text-light); text-align: center; padding: 40px;">No transactions found</div>';
                 return;
             }
 
@@ -1507,15 +2270,88 @@
             `).join('');
         }
 
-        // Check for existing analysis on load
+        function showEmptyState() {
+            document.getElementById('statTotal').textContent = '₹0';
+            document.getElementById('statMissed').textContent = '₹0';
+            document.getElementById('statMissed').style.color = 'var(--red)';
+            document.getElementById('statSavings').textContent = '₹0';
+            document.getElementById('statTxns').textContent = '0';
+            document.getElementById('pieCenterValue').textContent = '₹0';
+
+            for (let i = 1; i <= 6; i++) {
+                const fill = document.getElementById('barFill' + i);
+                const val = document.getElementById('barVal' + i);
+                const label = document.getElementById('barLabel' + i);
+                if (fill) fill.style.height = '0%';
+                if (val) {
+                    val.textContent = '₹0';
+                    val.classList.remove('show');
+                }
+                if (label) label.textContent = '-';
+            }
+
+            document.getElementById('pieSvg').innerHTML = '';
+            document.getElementById('pieLegend').innerHTML = '<div style="color: var(--text-light); text-align: center; padding: 40px;">Upload a statement to see your spending breakdown</div>';
+            document.getElementById('recommendationCards').innerHTML = '<p style="color: var(--text-light); text-align: center; padding: 40px;">Complete analysis to see card recommendations</p>';
+            document.getElementById('transactionsList').innerHTML = '<div style="color: var(--text-light); text-align: center; padding: 40px;">No transactions to display</div>';
+        }
+
+        function resetAnalysis() {
+            localStorage.removeItem('cardmax_analysis');
+            localStorage.removeItem('cardmax_selected_bank');
+            localStorage.removeItem('cardmax_selected_card');
+            localStorage.removeItem('cardmax_selected_card_id');
+
+            selectedBank = null;
+            selectedCard = null;
+            selectedCardId = null;
+
+            const dashboard = document.getElementById('dashboardMain');
+            dashboard.classList.remove('active');
+            dashboard.style.display = 'none';
+
+            document.getElementById('uploadSection').style.display = 'flex';
+
+            document.getElementById('bankPlaceholder').textContent = 'Choose your bank...';
+            document.getElementById('bankPlaceholder').classList.add('placeholder');
+            document.getElementById('stepCard').classList.remove('active');
+            document.getElementById('selectedCardDisplay').classList.remove('active');
+
+            const uploadZone = document.getElementById('uploadZone');
+            uploadZone.classList.remove('active');
+            uploadZone.innerHTML = `
+                <div class="upload-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="17 8 12 3 7 8"/>
+                        <line x1="12" y1="3" x2="12" y2="15"/>
+                    </svg>
+                </div>
+                <div class="upload-text">Drop your statement here</div>
+                <div class="upload-subtitle">or click to browse (PDF, CSV, Excel)</div>
+            `;
+
+            showEmptyState();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            showToast('Ready for new analysis');
+        }
+
         window.addEventListener('load', () => {
             const saved = localStorage.getItem('cardmax_analysis');
             if (saved) {
                 try {
-                    showDashboard(JSON.parse(saved));
+                    const data = JSON.parse(saved);
+                    if (data.totals && data.totals.total_spend > 0) {
+                        showDashboard(data);
+                    } else {
+                        showEmptyState();
+                    }
                 } catch(e) {
                     localStorage.removeItem('cardmax_analysis');
+                    showEmptyState();
                 }
+            } else {
+                showEmptyState();
             }
         });
     </script>
