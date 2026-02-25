@@ -1,11 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Compare Credit Cards India 2026 | Side-by-Side Comparison Tool</title>
     <meta name="description" content="Compare top credit cards side by side. See reward rates, fees, benefits, and eligibility in one view. Find the best card for your needs.">
     
+    <!-- Anti-flash theme init (shared with index.html) -->
+    <script>
+        (function(){
+            var t = localStorage.getItem('sw_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', t);
+        })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -17,6 +24,95 @@
     <link rel="stylesheet" href="css/comparison.css">
     
     <style>
+        /* ── DARK/LIGHT THEME (shared with index.html) ── */
+        :root,
+        [data-theme="dark"] {
+            --bg: #0a0a0f;
+            --bg-warm: #12121a;
+            --surface: #1a1a24;
+            --brown: #8B7355;
+            --brown-light: #A68B6A;
+            --accent: #D4A574;
+            --accent-dark: #B8935F;
+            --green: #7C9A6B;
+            --red: #C97B7B;
+            --purple: #8b7aa8;
+            --text: #FFFFFF;
+            --text-light: rgba(255,255,255,0.7);
+            --text-muted: rgba(255,255,255,0.5);
+            --border: rgba(255,255,255,0.1);
+            --shadow: rgba(0,0,0,0.3);
+
+            --nav-bg: rgba(10, 10, 15, 0.85);
+            --card-bg: rgba(255,255,255,0.05);
+            --card-border: rgba(255,255,255,0.12);
+            --glass-bg: rgba(255,255,255,0.07);
+            --glass-border: rgba(255,255,255,0.12);
+            --glow-accent: rgba(212,165,116,0.35);
+            --glow-brown: rgba(139,115,85,0.3);
+            --input-bg: rgba(255,255,255,0.05);
+        }
+
+        [data-theme="light"] {
+            --bg: #faf8f5;
+            --bg-warm: #f5f1eb;
+            --surface: #ffffff;
+            --text: #2c2c2c;
+            --text-light: #6b6b6b;
+            --text-muted: #9b9b9b;
+            --accent: #d4a574;
+            --accent-dark: #b8935f;
+            --brown: #5c4d3c;
+            --brown-light: #7a6552;
+            --border: #e8e4df;
+            --shadow: rgba(0,0,0,0.04);
+            --green: #7c9a6b;
+            --red: #c45c4a;
+            --purple: #8b7aa8;
+
+            --nav-bg: rgba(250, 248, 245, 0.9);
+            --card-bg: #ffffff;
+            --card-border: #e8e4df;
+            --glass-bg: rgba(255,255,255,0.4);
+            --glass-border: rgba(255,255,255,0.3);
+            --glow-accent: rgba(212,165,116,0.2);
+            --glow-brown: rgba(92,77,60,0.15);
+            --input-bg: #faf8f5;
+        }
+
+        .theme-toggle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            color: var(--text-light);
+            cursor: pointer;
+            display: grid;
+            place-items: center;
+            transition: all 0.3s;
+            flex-shrink: 0;
+        }
+        .theme-toggle:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: rotate(15deg);
+        }
+        .theme-toggle svg {
+            width: 18px;
+            height: 18px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: opacity 0.2s;
+        }
+        [data-theme="dark"] .icon-moon { display: none; }
+        [data-theme="dark"] .icon-sun  { display: block; }
+        [data-theme="light"] .icon-moon { display: block; }
+        [data-theme="light"] .icon-sun  { display: none; }
+
         /* Eligibility Modal Styles */
         .eligibility-modal {
             display: none;
@@ -216,6 +312,10 @@
                 <li><a href="guides.html">Guides</a></li>
             </ul>
             <button class="nav-cta" onclick="window.location.href='index.html#download'">Get the App</button>
+            <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme" aria-label="Toggle theme">
+                <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            </button>
         </div>
     </nav>
 
@@ -513,6 +613,23 @@
                 toast.classList.remove('show');
             }, 3000);
         }
+    </script>
+
+    <!-- Shared theme controls (same naming as index.html) -->
+    <script>
+        function initTheme() {
+            const saved = localStorage.getItem('sw_theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', saved);
+        }
+
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme') || 'dark';
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('sw_theme', next);
+        }
+
+        document.addEventListener('DOMContentLoaded', initTheme);
     </script>
 </body>
 </html>
