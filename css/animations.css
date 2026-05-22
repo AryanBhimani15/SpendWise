@@ -271,3 +271,90 @@
     font-weight: 500;
     margin-top: 8px;
 }
+/* =============================================================
+   PIE CHART FIX — add this to your existing CSS (or animations.css)
+   ============================================================= */
+
+/* 1. The SVG background ring should always be visible in both themes */
+.pie-chart-bg {
+    fill: none;
+    stroke: var(--border);   /* uses theme variable — works in light & dark */
+    stroke-width: 8;
+}
+
+/* 2. Segments: remove rounded linecap (it causes visual overlap/gaps at small sizes)
+      and make sure the CSS transition is set as a base so it doesn't flash on open */
+.pie-chart-segment {
+    fill: none;
+    stroke-width: 8;
+    stroke-linecap: butt;           /* was "round" — caused gaps between adjacent segments */
+    stroke-dasharray: 0 238.76;     /* start hidden */
+    stroke-dashoffset: 0;
+    transition: stroke-width 0.2s ease, opacity 0.2s ease;
+    /* NOTE: stroke-dasharray transition is set inline by JS so it can be staggered */
+}
+
+/* 3. Segment colours — use solid colours instead of url(#gradient)
+      because linearGradient in SVG defs referenced by stroke doesn't work
+      reliably across browsers when the SVG is embedded inline and the
+      element is a <circle> (path gradients work; stroke gradients need
+      gradientUnits="userSpaceOnUse" with exact coordinates).
+      Solid accent colours look cleaner anyway. */
+.segment-shopping { stroke: #D4A574; }
+.segment-dining   { stroke: #7A6B5A; }
+.segment-travel   { stroke: #7C9A6B; }
+.segment-others   { stroke: #8B7AA8; }
+
+/* 4. Hover — handled by JS, but make the transition smooth */
+.pie-chart-segment:hover {
+    cursor: pointer;
+}
+
+/* 5. Legend colours — sync with the fixed segment colours above */
+.pie-legend-color.shopping { background: #D4A574; }
+.pie-legend-color.dining   { background: #7A6B5A; }
+.pie-legend-color.travel   { background: #7C9A6B; }
+.pie-legend-color.others   { background: #8B7AA8; }
+
+/* 6. Tooltip — make sure it's positioned relative to the container */
+.pie-chart-container {
+    position: relative;
+}
+
+.segment-tooltip {
+    position: absolute;
+    background: var(--brown);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    white-space: nowrap;
+    z-index: 10;
+    transform: translate(-50%, -100%);
+    margin-top: -8px;
+}
+
+.segment-tooltip.show {
+    opacity: 1;
+}
+
+/* 7. Light mode — make the dashboard modal surface readable */
+[data-theme="light"] .demo-dashboard {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="light"] .dashboard-inner {
+    background: var(--bg);
+    color: var(--text);
+}
+
+[data-theme="light"] .dashboard-card,
+[data-theme="light"] .chart-container,
+[data-theme="light"] .rec-card {
+    background: var(--surface);
+    border-color: var(--border);
+}

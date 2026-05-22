@@ -297,6 +297,40 @@ def detect_international(description, amount_str=''):
     
     return False
 
+def _read_excel_smart(file_path, engine='openpyxl'):
+    """
+    Read Excel files robustly — handles metadata rows, merged cells,
+    and blank rows that appear before actual column headers in bank statements.
+    """
+    # First pass: read raw to find where real headers start
+    raw = pd.read_excel(file_path, engine=engine, header=None)
+
+    # Look for the row that most looks like a header (has the most string values
+    # and contains keywords common to bank statement columns)
+    header_keywords = {'date', 'amount', 'desc', 'narration', 'merchant',
+                       'debit', 'credit', 'balance', 'transaction', 'particulars'}
+    best_row = 0
+    best_score = 0
+
+    for i, row in raw.iterrows():
+        if i > 20:  # Headers won't be beyond row 20
+            break
+        row_str = ' '.join(str(v).lower() for v in row if pd.notna(v))
+        score = sum(1 for kw in header_keywords if kw in row_str)
+        if score > best_score:
+            best_score = score
+            best_row = i
+
+    df = pd.read_excel(file_path, engine=engine, header=best_row)
+
+    # Drop fully empty rows and columns
+    df.dropna(how='all', inplace=True)
+    df.dropna(axis=1, how='all', inplace=True)
+    df.reset_index(drop=True, inplace=True)
+
+    return df
+
+
 def analyze_statement(file_path):
     """
     Analyze credit card statement with improved accuracy
@@ -313,8 +347,15 @@ def analyze_statement(file_path):
                     continue
             if df is None:
                 raise Exception("Could not read CSV file with any encoding")
+        elif file_path.endswith('.xlsx'):
+            df = _read_excel_smart(file_path, engine='openpyxl')
+        elif file_path.endswith('.xls'):
+            df = _read_excel_smart(file_path, engine='xlrd')
         else:
-            df = pd.read_excel(file_path)
+            try:
+                df = _read_excel_smart(file_path, engine='openpyxl')
+            except Exception:
+                df = _read_excel_smart(file_path, engine='xlrd')
     except Exception as e:
         raise Exception(f"Failed to read file: {str(e)}")
     

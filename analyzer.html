@@ -110,18 +110,72 @@
 
         /* Upload Section Styles */
         .upload-section {
-            padding: 140px 5% 100px;
-            background: var(--bg-warm);
-            min-height: 70vh;
+            padding: 140px 5% 120px;
+            background:
+                radial-gradient(circle at 0% 0%, rgba(212,165,116,0.16), transparent 55%),
+                radial-gradient(circle at 100% 100%, rgba(124,154,107,0.18), transparent 55%),
+                var(--bg);
+            min-height: 80vh;
             display: flex;
             align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-section::before,
+        .upload-section::after {
+            content: '';
+            position: absolute;
+            width: 420px;
+            height: 420px;
+            border-radius: 999px;
+            filter: blur(70px);
+            opacity: 0.25;
+            pointer-events: none;
+        }
+
+        .upload-section::before {
+            background: rgba(212,165,116,0.55);
+            top: -120px;
+            right: -120px;
+        }
+
+        .upload-section::after {
+            background: rgba(124,154,107,0.55);
+            bottom: -160px;
+            left: -120px;
         }
 
         .upload-container {
-            max-width: 700px;
-            margin: 0 auto;
-            text-align: center;
+            max-width: 1100px;
             width: 100%;
+            margin: 0 auto;
+            text-align: left;
+            padding: 32px 32px 36px;
+            border-radius: 32px;
+            background: linear-gradient(135deg, rgba(10,10,15,0.92), rgba(26,26,36,0.96));
+            border: 1px solid rgba(255,255,255,0.06);
+            box-shadow:
+                0 24px 60px rgba(0,0,0,0.6),
+                0 0 0 1px rgba(255,255,255,0.02);
+            backdrop-filter: blur(26px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-container::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 10% -20%, rgba(255,255,255,0.10), transparent 55%);
+            opacity: 0.8;
+            pointer-events: none;
+        }
+
+        .upload-inner {
+            position: relative;
+            z-index: 1;
         }
 
         .upload-container h2 {
@@ -138,14 +192,60 @@
             line-height: 1.6;
         }
 
+        .upload-highlights {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .upload-pill {
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            font-weight: 600;
+            border: 1px solid rgba(212,165,116,0.35);
+            color: var(--text-light);
+            background: rgba(212,165,116,0.06);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .upload-pill-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 999px;
+            background: var(--accent);
+        }
+
+        .upload-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+            gap: 28px;
+            align-items: stretch;
+        }
+
+        .upload-left {
+            position: relative;
+            z-index: 1;
+        }
+
+        .upload-right {
+            position: relative;
+        }
+
         .cascade-container {
-            margin-bottom: 40px;
+            margin-bottom: 32px;
             text-align: left;
-            background: var(--surface);
-            border-radius: 24px;
-            padding: 32px;
-            border: 1px solid var(--border);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+            background: radial-gradient(circle at top left, rgba(255,255,255,0.09), transparent 55%),
+                        rgba(10,10,15,0.9);
+            border-radius: 22px;
+            padding: 28px 26px 24px;
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 18px 40px rgba(0,0,0,0.55);
         }
 
         .cascade-step {
@@ -302,7 +402,8 @@
         .bank-other { background: var(--text-light); }
 
         .selected-card-display {
-            background: linear-gradient(135deg, var(--brown) 0%, #3d3226 100%);
+            background: var(--surface);
+            border: 1px solid var(--border);
             border-radius: 20px;
             padding: 28px;
             margin-top: 8px;
@@ -361,10 +462,10 @@
         }
 
         .upload-zone {
-            border: 3px dashed var(--border);
-            border-radius: 28px;
-            padding: 60px 40px;
-            background: var(--surface);
+            border: 2px dashed rgba(255,255,255,0.18);
+            border-radius: 24px;
+            padding: 40px 32px;
+            background: linear-gradient(135deg, rgba(26,26,36,0.9), rgba(10,10,15,0.95));
             transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
             cursor: pointer;
             position: relative;
@@ -404,10 +505,11 @@
         }
 
         .upload-icon {
-            width: 80px;
-            height: 80px;
-            background: var(--bg-warm);
-            border-radius: 20px;
+            width: 72px;
+            height: 72px;
+            background: radial-gradient(circle at 30% 0%, rgba(255,255,255,0.26), transparent 55%),
+                        rgba(10,10,15,0.9);
+            border-radius: 999px;
             display: grid;
             place-items: center;
             margin: 0 auto 24px;
@@ -431,7 +533,7 @@
 
         .upload-text {
             font-size: 20px;
-            color: var(--brown);
+            color: #fef7ed;
             font-weight: 600;
             margin-bottom: 8px;
             font-family: 'DM Sans', sans-serif;
@@ -439,7 +541,7 @@
 
         .upload-subtitle {
             font-size: 15px;
-            color: var(--text-light);
+            color: var(--text-muted);
         }
 
         .upload-loading {
@@ -1102,6 +1204,19 @@
             .charts-grid { grid-template-columns: 1fr; }
             .recommendation-cards { grid-template-columns: 1fr; }
             .cascade-container { padding: 24px; }
+            .upload-grid { grid-template-columns: 1.1fr 0.9fr; }
+        }
+
+        @media (max-width: 900px) {
+            .upload-container {
+                padding: 28px 20px 30px;
+            }
+            .upload-grid {
+                grid-template-columns: 1fr;
+            }
+            .upload-right {
+                order: -1;
+            }
         }
 
         @media (max-width: 768px) {
@@ -1133,60 +1248,119 @@
 
     <section class="upload-section" id="uploadSection">
         <div class="upload-container">
-            <span class="section-label">Privacy-First Analysis</span>
-            <h2>Select Your Card & Upload</h2>
-            <p>Choose your bank and credit card, then upload your statement. We will analyze your spending and find better rewards.</p>
+            <div class="upload-inner">
+                <span class="section-label">Privacy-First Analysis</span>
+                <h2>Select Your Card & Upload</h2>
+                <p>Choose your bank and credit card, then upload your statement. We will analyze your spending and find better rewards.</p>
 
-            <div class="cascade-container" id="cascadeContainer">
-                <div class="cascade-step active" id="stepBank">
-                    <label class="cascade-label">Step 1: Select Your Bank</label>
-                    <div class="custom-dropdown" id="bankDropdown">
-                        <div class="dropdown-trigger" onclick="toggleDropdown('bank')">
-                            <span class="placeholder" id="bankPlaceholder">Choose your bank...</span>
-                            <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </div>
-                        <div class="dropdown-menu" id="bankMenu"></div>
-                    </div>
+                <div class="upload-highlights">
+                    <span class="upload-pill">
+                        <span class="upload-pill-dot"></span>
+                        Bank-grade encryption
+                    </span>
+                    <span class="upload-pill">
+                        <span class="upload-pill-dot"></span>
+                        Read-only access
+                    </span>
+                    <span class="upload-pill">
+                        <span class="upload-pill-dot"></span>
+                        No credentials stored
+                    </span>
                 </div>
 
-                <div class="cascade-step" id="stepCard">
-                    <label class="cascade-label">Step 2: Select Your Card</label>
-                    <div class="custom-dropdown" id="cardDropdown">
-                        <div class="dropdown-trigger" onclick="toggleDropdown('card')">
-                            <span class="placeholder" id="cardPlaceholder">Choose your card...</span>
-                            <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="6 9 12 15 18 9"></polyline>
-                            </svg>
-                        </div>
-                        <div class="dropdown-menu" id="cardMenu"></div>
-                    </div>
-                </div>
+                <div class="upload-grid">
+                    <div class="upload-left">
+                        <div class="cascade-container" id="cascadeContainer">
+                            <div class="cascade-step active" id="stepBank">
+                                <label class="cascade-label">Step 1: Select Your Bank</label>
+                                <div class="custom-dropdown" id="bankDropdown">
+                                    <div class="dropdown-trigger" onclick="toggleDropdown('bank')">
+                                        <span class="placeholder" id="bankPlaceholder">Choose your bank...</span>
+                                        <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="6 9 12 15 18 9"></polyline>
+                                        </svg>
+                                    </div>
+                                    <div class="dropdown-menu" id="bankMenu"></div>
+                                </div>
+                            </div>
 
-                <div class="selected-card-display" id="selectedCardDisplay">
-                    <div class="selected-card-header">
-                        <span class="selected-card-bank" id="displayBank">BANK</span>
-                        <button class="selected-card-change" onclick="resetSelection()">Change</button>
+                            <div class="cascade-step" id="stepCard">
+                                <label class="cascade-label">Step 2: Select Your Card</label>
+                                <div class="custom-dropdown" id="cardDropdown">
+                                    <div class="dropdown-trigger" onclick="toggleDropdown('card')">
+                                        <span class="placeholder" id="cardPlaceholder">Choose your card...</span>
+                                        <svg class="dropdown-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="6 9 12 15 18 9"></polyline>
+                                        </svg>
+                                    </div>
+                                    <div class="dropdown-menu" id="cardMenu"></div>
+                                </div>
+                            </div>
+
+                            <div class="selected-card-display" id="selectedCardDisplay">
+                                <div class="selected-card-header">
+                                    <span class="selected-card-bank" id="displayBank">BANK</span>
+                                    <button class="selected-card-change" onclick="resetSelection()">Change</button>
+                                </div>
+                                <div class="selected-card-name" id="displayCard">Card Name</div>
+                                <div class="selected-card-type" id="displayType">Card Type</div>
+                            </div>
+                        </div>
+
+                        <div class="upload-zone" id="uploadZone">
+                            <div class="upload-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="17 8 12 3 7 8"/>
+                                    <line x1="12" y1="3" x2="12" y2="15"/>
+                                </svg>
+                            </div>
+                            <div class="upload-text">Drop your statement here</div>
+                            <div class="upload-subtitle">or click to browse (PDF, CSV, Excel)</div>
+                        </div>
+
+                        <input type="file" id="fileInput" style="display: none;" accept=".pdf,.csv,.xlsx,.xls">
                     </div>
-                    <div class="selected-card-name" id="displayCard">Card Name</div>
-                    <div class="selected-card-type" id="displayType">Card Type</div>
+
+                    <div class="upload-right">
+                        <div class="chart-container" style="height: 100%; display: flex; flex-direction: column; justify-content: space-between; gap: 18px; background: radial-gradient(circle at 0% 0%, rgba(212,165,116,0.26), transparent 55%), rgba(10,10,15,0.96);">
+                            <div>
+                                <span class="section-label" style="margin-bottom: 8px; display: inline-flex; align-items: center; gap: 6px; font-size: 11px;">
+                                    <svg class="icon-svg" style="width: 16px; height: 16px;" viewBox="0 0 24 24">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                                        <line x1="12" y1="17" x2="12.01" y2="17"/>
+                                    </svg>
+                                    Live preview
+                                </span>
+                                <h3 class="chart-title" style="margin-bottom: 6px;">How your dashboard will look</h3>
+                                <p style="font-size: 14px; color: var(--text-light);">
+                                    We convert raw statement lines into a clean dashboard of categories, trends, and card-specific insights.
+                                </p>
+                            </div>
+                            <div class="stats-grid" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-bottom: 8px;">
+                                <div class="stat-card" style="padding: 18px 16px;">
+                                    <div class="stat-label">Potential Rewards</div>
+                                    <div class="stat-value" style="font-size: 26px;" id="">₹24,500</div>
+                                    <div class="stat-change positive">
+                                        With best-fit cards
+                                    </div>
+                                </div>
+                                <div class="stat-card" style="padding: 18px 16px;">
+                                    <div class="stat-label">Missed Value</div>
+                                    <div class="stat-value" style="font-size: 26px; color: var(--red);">₹6,200</div>
+                                    <div class="stat-change negative">
+                                        On current setup
+                                    </div>
+                                </div>
+                            </div>
+                            <p style="font-size: 12px; color: var(--text-muted); margin: 0;">
+                                This is a sample view. Your actual numbers are calculated locally from your statement and never shared with anyone.
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-            <div class="upload-zone" id="uploadZone">
-                <div class="upload-icon">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                        <polyline points="17 8 12 3 7 8"/>
-                        <line x1="12" y1="3" x2="12" y2="15"/>
-                    </svg>
-                </div>
-                <div class="upload-text">Drop your statement here</div>
-                <div class="upload-subtitle">or click to browse (PDF, CSV, Excel)</div>
-            </div>
-
-            <input type="file" id="fileInput" style="display: none;" accept=".pdf,.csv,.xlsx,.xls">
         </div>
     </section>
 

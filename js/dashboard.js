@@ -82,53 +82,66 @@ function animateDashboard() {
 
 function animatePieChart() {
     const segments = [
-        { id: 'pieSegment1', target: 35 },
-        { id: 'pieSegment2', target: 25 },
-        { id: 'pieSegment3', target: 20 },
-        { id: 'pieSegment4', target: 20 }
+        { id: 'pieSegment1', target: 35, label: 'Shopping',  amount: '₹85,750' },
+        { id: 'pieSegment2', target: 25, label: 'Dining',    amount: '₹61,250' },
+        { id: 'pieSegment3', target: 20, label: 'Travel',    amount: '₹49,000' },
+        { id: 'pieSegment4', target: 20, label: 'Others',    amount: '₹49,000' }
     ];
 
-    let accumulated = 0;
     const radius = 38;
-    const circumference = 2 * Math.PI * radius;
+    const circumference = 2 * Math.PI * radius; // ≈ 238.76
 
-    segments.forEach((seg, i) => {
-        const element = document.getElementById(seg.id);
-        if (!element) return;
-        
-        const dashArray = (seg.target / 100) * circumference;
-        const offset = -((accumulated / 100) * circumference);
-        
-        element.style.strokeDasharray = `0 ${circumference}`;
-        element.style.strokeDashoffset = 0;
-        
-        setTimeout(() => {
-            element.style.transition = 'stroke-dasharray 1.2s cubic-bezier(0.23, 1, 0.32, 1), stroke-dashoffset 1.2s cubic-bezier(0.23, 1, 0.32, 1)';
-            element.style.strokeDasharray = `${dashArray} ${circumference}`;
-            element.style.strokeDashoffset = offset;
-        }, 300 + i * 200);
-        
+    // Step 1: Set every segment to "empty" with the correct final offset
+    // (no transition yet) so the animation only grows the dash length
+    let accumulated = 0;
+    segments.forEach((seg) => {
+        const el = document.getElementById(seg.id);
+        if (!el) return;
+
+        // SVG circle starts at 3-o'clock; CSS rotate(-90deg) shifts to 12-o'clock.
+        // Negative offset = move start clockwise by that amount.
+        const finalOffset = -((accumulated / 100) * circumference);
+        seg._dash   = (seg.target / 100) * circumference;
+        seg._offset = finalOffset;
+
+        el.style.transition      = 'none';
+        el.style.strokeDasharray  = `0 ${circumference}`;
+        el.style.strokeDashoffset = finalOffset;
+
         accumulated += seg.target;
     });
 
-    // Add hover interactions
+    // Step 2: After two rAF ticks the browser has painted the empty state.
+    // Now add the transition and grow each dash in.
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            segments.forEach((seg, i) => {
+                const el = document.getElementById(seg.id);
+                if (!el) return;
+                el.style.transition = `stroke-dasharray 1s cubic-bezier(0.23, 1, 0.32, 1) ${i * 0.18}s`;
+                el.style.strokeDasharray = `${seg._dash} ${circumference}`;
+            });
+        });
+    });
+
+    // Step 3: Hover (stroke-width in SVG viewBox units; base is 8)
     segments.forEach((seg) => {
-        const element = document.getElementById(seg.id);
-        if (!element) return;
-        
-        element.addEventListener('mouseenter', (e) => {
+        const el = document.getElementById(seg.id);
+        if (!el) return;
+
+        el.setAttribute('data-label',  seg.label);
+        el.setAttribute('data-value',  seg.target + '%');
+        el.setAttribute('data-amount', seg.amount);
+
+        el.addEventListener('mouseenter', (e) => {
             showTooltip(e, seg.id);
-            element.style.strokeWidth = '28';
-            element.style.filter = 'drop-shadow(0 8px 16px rgba(0,0,0,0.2))';
+            el.style.strokeWidth = '10';
         });
-        
-        element.addEventListener('mouseleave', () => {
+        el.addEventListener('mouseleave', () => {
             hideTooltip();
-            element.style.strokeWidth = '24';
-            element.style.filter = 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))';
+            el.style.strokeWidth = '8';
         });
-        
-        element.addEventListener('mousemove', moveTooltip);
+        el.addEventListener('mousemove', moveTooltip);
     });
 }
 
@@ -163,31 +176,20 @@ function hideTooltip() {
 
 function highlightSegment(index) {
     const segments = ['pieSegment1', 'pieSegment2', 'pieSegment3', 'pieSegment4'];
-    
     segments.forEach((id, i) => {
         const el = document.getElementById(id);
         if (!el) return;
-        
-        if (i === index) {
-            el.style.strokeWidth = '28';
-            el.style.filter = 'drop-shadow(0 8px 16px rgba(0,0,0,0.2))';
-            el.style.opacity = '1';
-        } else {
-            el.style.opacity = '0.3';
-        }
+        el.style.strokeWidth = i === index ? '10' : '8';
+        el.style.opacity     = i === index ? '1'  : '0.35';
     });
 }
 
 function resetSegment() {
-    const segments = ['pieSegment1', 'pieSegment2', 'pieSegment3', 'pieSegment4'];
-    
-    segments.forEach(id => {
+    ['pieSegment1', 'pieSegment2', 'pieSegment3', 'pieSegment4'].forEach(id => {
         const el = document.getElementById(id);
         if (!el) return;
-        
-        el.style.strokeWidth = '24';
-        el.style.filter = 'drop-shadow(0 2px 4px rgba(0,0,0,0.1))';
-        el.style.opacity = '1';
+        el.style.strokeWidth = '8';
+        el.style.opacity     = '1';
     });
 }
 // Dashboard.js - Handles the analyzer dashboard display

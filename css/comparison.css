@@ -301,7 +301,7 @@
 /* Comparison specific layout */
 .compare-hero {
     padding: 120px 20px 60px;
-    background: var(--bg-warm);
+    background: var(--bg);
     text-align: center;
 }
 
@@ -525,7 +525,7 @@
 
 .quick-compare-section {
     padding: 80px 20px;
-    background: var(--bg-warm);
+    background: var(--bg);
 }
 
 .quick-compare-container {

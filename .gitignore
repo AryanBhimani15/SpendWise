@@ -4,3 +4,11 @@ data/
 .DS_Store
 *.csv
 *.json
+
+# Personal / not for deploy
+sample_credit_card_statement*
+vscode-extensions.txt
+vscode-settings.json
+backend/vscode-extensions.txt
+backend/my-app/
+*.xlsx

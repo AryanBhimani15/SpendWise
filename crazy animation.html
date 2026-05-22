@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SpendWise</title>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<style>
+
+:root{
+--bg-color:#050507;
+--accent-gold:#D4A574;
+--accent-gold-dim:rgba(212,165,116,0.12);
+--card-black:#1c1c1e;
+--card-blue:#162a4d;
+--card-red:#3d1414;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+font-family:'Inter',sans-serif;
+background:var(--bg-color);
+color:#fff;
+height:100vh;
+overflow:hidden;
+}
+
+/* subtle noise grain */
+body::after{
+content:'';
+position:fixed;inset:0;
+background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+opacity:0.03;
+pointer-events:none;
+z-index:999;
+}
+
+/* ambient glow behind cards */
+.glow{
+position:fixed;
+width:500px;height:500px;
+border-radius:50%;
+background:radial-gradient(circle, rgba(212,165,116,0.07) 0%, transparent 70%);
+top:50%;right:10%;
+transform:translate(0,-50%);
+pointer-events:none;
+filter:blur(40px);
+}
+
+/* MAIN TRACK */
+.viewport-track{
+position:relative;
+width:100%;
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+}
+
+/* DASHBOARD TEXT */
+.dashboard{
+position:absolute;
+width:100%;
+max-width:1200px;
+padding:0 60px;
+display:grid;
+grid-template-columns:1fr 1fr;
+align-items:center;
+opacity:0;
+pointer-events:none;
+transform:translateX(-100px);
+}
+
+.hero-text h2{
+font-family:'DM Sans';
+font-size:4.5rem;
+line-height:1;
+margin-bottom:20px;
+letter-spacing:-3px;
+}
+
+.hero-text h2 span{color:var(--accent-gold);}
+
+.hero-text p{
+color:rgba(255,255,255,0.45);
+font-size:1.2rem;
+max-width:440px;
+margin-bottom:36px;
+}
+
+/* CTA button */
+.cta-btn{
+display:inline-flex;
+align-items:center;
+gap:10px;
+background:var(--accent-gold);
+color:#000;
+border:none;
+padding:14px 28px;
+border-radius:100px;
+font-family:'Inter',sans-serif;
+font-size:0.85rem;
+font-weight:600;
+letter-spacing:0.02em;
+cursor:pointer;
+transition:transform .2s, box-shadow .2s;
+}
+.cta-btn:hover{
+transform:scale(1.04);
+box-shadow:0 8px 32px rgba(212,165,116,0.3);
+}
+.cta-btn svg{transition:transform .2s;}
+.cta-btn:hover svg{transform:translateX(3px);}
+
+/* CARD STACK */
+.card-stack{
+position:absolute;
+inset:0;
+display:flex;
+align-items:center;
+justify-content:center;
+perspective:2000px;
+pointer-events:none;
+z-index:10;
+}
+
+.card{
+position:absolute;
+width:320px;
+height:200px;
+border-radius:26px;
+background:
+radial-gradient(circle at top left, rgba(255,255,255,0.07), transparent 70%),
+var(--card-black);
+border:1px solid rgba(255,255,255,0.15);
+box-shadow:
+0 40px 100px rgba(0,0,0,0.8),
+0 1px 0 rgba(255,255,255,0.05) inset;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:30px;
+will-change:transform;
+overflow:hidden;
+}
+
+/* card sheen */
+.card::before{
+content:'';
+position:absolute;
+top:-80%;left:-60%;
+width:220%;height:220%;
+background:conic-gradient(from 200deg, transparent 60%, rgba(255,255,255,0.03) 68%, transparent 76%);
+pointer-events:none;
+}
+
+.card-brand{
+font-family:'DM Sans';
+font-size:2.2rem;
+letter-spacing:-1.5px;
+font-weight:700;
+color:#fff;
+opacity:0;
+}
+
+.card-loader{
+position:absolute;
+bottom:40px;
+width:60px;
+height:2px;
+background:rgba(255,255,255,0.1);
+border-radius:2px;
+overflow:hidden;
+opacity:0;
+}
+
+.card-progress{
+width:0%;
+height:100%;
+background:linear-gradient(90deg, var(--accent-gold), #f0c898);
+}
+
+/* card number */
+.card-number{
+position:absolute;
+bottom:38px;
+left:30px;
+font-size:0.65rem;
+letter-spacing:0.2em;
+color:rgba(255,255,255,0.25);
+opacity:0;
+}
+
+.card-primary{
+z-index:100;
+border-color:rgba(212,165,116,0.45);
+}
+
+.card-secondary{
+background:
+radial-gradient(circle at top left, rgba(255,255,255,0.05), transparent 70%),
+var(--card-blue);
+z-index:90;
+opacity:0;
+}
+
+.card-tertiary{
+background:
+radial-gradient(circle at top left, rgba(255,255,255,0.05), transparent 70%),
+var(--card-red);
+z-index:80;
+opacity:0;
+}
+
+/* CHIP */
+.chip{
+position:absolute;
+top:25px;
+left:25px;
+width:40px;
+height:30px;
+background:linear-gradient(135deg,#f0d58a,#8a6d1d);
+border-radius:6px;
+opacity:0.65;
+}
+.chip::after{
+content:'';
+position:absolute;
+top:50%;left:0;right:0;
+height:1px;
+background:rgba(0,0,0,0.2);
+transform:translateY(-50%);
+}
+
+/* card logo circles (top right) */
+.card-mark{
+position:absolute;
+top:22px;right:26px;
+display:flex;
+}
+.mark-circle{
+width:20px;height:20px;
+border-radius:50%;
+opacity:0.6;
+}
+.mc1{background:var(--accent-gold);margin-right:-6px;}
+.mc2{background:rgba(212,165,116,0.4);}
+
+/* NAV */
+nav{
+position:absolute;
+top:40px;
+width:100%;
+max-width:1200px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 60px;
+opacity:0;
+z-index:50;
+}
+
+.nav-divider{
+flex:1;
+height:1px;
+background:linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+margin:0 32px;
+}
+
+/* bottom status bar */
+.status-bar{
+position:absolute;
+bottom:36px;
+width:100%;
+max-width:1200px;
+padding:0 60px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+opacity:0;
+}
+.status-dot{
+width:6px;height:6px;
+border-radius:50%;
+background:#3ecf6a;
+box-shadow:0 0 8px #3ecf6a;
+display:inline-block;
+margin-right:8px;
+}
+.status-text{
+font-size:.7rem;
+letter-spacing:.1em;
+color:rgba(255,255,255,0.3);
+}
+.status-version{
+font-size:.7rem;
+letter-spacing:.15em;
+color:rgba(255,255,255,0.15);
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="glow"></div>
+
+<nav id="nav">
+<div style="font-weight:700;color:var(--accent-gold);font-family:'DM Sans';">SpendWise.</div>
+<div class="nav-divider"></div>
+<div style="font-size:.7rem;letter-spacing:2px;opacity:.35;">PREMIER PORTAL</div>
+</nav>
+
+<div class="viewport-track" id="track">
+
+<div class="dashboard" id="dash">
+<div class="hero-text">
+
+<h2 id="title">
+Spend Better.<span><br>Earn More.</span>
+</h2>
+
+<p id="para">
+The high-precision engine for maximizing your daily credit card rewards.
+</p>
+
+<button class="cta-btn" id="cta">
+Get Started
+<svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+<path d="M2 7h10M7 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+</button>
+
+</div>
+</div>
+
+<div class="card-stack" id="cards">
+
+<div class="card card-primary" id="c1">
+<div class="chip"></div>
+<div class="card-mark">
+<div class="mark-circle mc1"></div>
+<div class="mark-circle mc2"></div>
+</div>
+<div class="card-brand" id="brand">SpendWise</div>
+<div class="card-number" id="cnum">•••• •••• •••• 1247</div>
+<div class="card-loader" id="loaderBox">
+<div class="card-progress" id="bar"></div>
+</div>
+</div>
+
+<div class="card card-secondary" id="c2">
+<div class="chip"></div>
+</div>
+
+<div class="card card-tertiary" id="c3">
+<div class="chip"></div>
+</div>
+
+</div>
+
+</div>
+
+<div class="status-bar" id="statusBar">
+<div>
+<span class="status-dot"></span>
+<span class="status-text">All systems operational</span>
+</div>
+<div class="status-version">v2.4.1</div>
+</div>
+
+<script>
+
+const tl = gsap.timeline();
+
+/* loader sequence */
+tl.to("#brand",{opacity:1,duration:1,ease:"power2.out"})
+
+.to("#loaderBox",{opacity:1,duration:0.4},"-=0.4")
+
+.to("#bar",{width:"100%",duration:1.8,ease:"power2.inOut"})
+
+.to("#loaderBox",{opacity:0,duration:0.3})
+
+.to("#cnum",{opacity:1,duration:0.6},"-=0.2")
+
+/* dashboard reveal */
+.to("#dash",{opacity:1,x:0,pointerEvents:"auto",duration:1.5,ease:"expo.out"},"-=0.2")
+
+.to("#nav",{opacity:1,duration:1},"-=1")
+
+.to("#statusBar",{opacity:1,duration:0.8},"-=0.6")
+
+/* card fan */
+.to("#c1",{x:"24vw",rotation:-2,duration:1.5,ease:"expo.inOut"},"-=1.5")
+
+.to("#c2",{
+opacity:1,
+x:"20vw",
+y:-45,
+rotation:-12,
+scale:0.9,
+duration:1.5,
+ease:"expo.inOut"
+},"-=1.4")
+
+.to("#c3",{
+opacity:1,
+x:"28vw",
+y:45,
+rotation:12,
+scale:0.9,
+duration:1.5,
+ease:"expo.inOut"
+},"-=1.4")
+
+/* text reveal */
+.from("#title",{x:-80,opacity:0,duration:1.2,ease:"power4.out"},"-=1")
+
+.from("#para",{x:-40,opacity:0,duration:1.2,ease:"power4.out"},"-=1.1")
+
+.from("#cta",{x:-20,opacity:0,duration:1,ease:"power4.out"},"-=1");
+
+/* ambient float — starts only after fan animation completes to avoid y-transform conflict */
+tl.then(() => {
+  gsap.to("#c1",{y:"+=10",duration:3.8,repeat:-1,yoyo:true,ease:"sine.inOut"});
+  gsap.to("#c2",{y:"+=8", duration:4.2,repeat:-1,yoyo:true,ease:"sine.inOut",delay:0.3});
+  gsap.to("#c3",{y:"-=8", duration:4.0,repeat:-1,yoyo:true,ease:"sine.inOut",delay:0.6});
+});
+
+</script>
+
+</body>
+</html>

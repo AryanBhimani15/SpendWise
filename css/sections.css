@@ -5,7 +5,7 @@ nav {
     width: 100%;
     z-index: 1000;
     padding: 20px 5%;
-    background: rgba(250, 248, 245, 0.9);
+    background: var(--nav-bg, rgba(10, 10, 15, 0.85));
     backdrop-filter: blur(20px);
     border-bottom: 1px solid transparent;
     transition: all 0.3s ease;
@@ -295,7 +295,7 @@ nav.scrolled {
 /* Demo Section */
 .demo-section {
     padding: 120px 5%;
-    background: var(--bg-warm);
+    background: var(--bg);
     position: relative;
     overflow: hidden;
 }
@@ -1479,7 +1479,7 @@ nav.scrolled {
 
 /* Calculator */
 .calculator-section {
-    background: var(--bg-warm);
+    background: var(--bg);
     padding: 120px 5%;
 }
 
@@ -1602,8 +1602,8 @@ nav.scrolled {
 /* App Download */
 .app-download-section {
     padding: 120px 5%;
-    background: var(--brown);
-    color: var(--bg);
+    background: var(--bg);
+    color: var(--text);
     text-align: center;
     position: relative;
     overflow: hidden;
@@ -1666,7 +1666,7 @@ nav.scrolled {
 /* Code Section */
 .code-section {
     padding: 120px 5%;
-    background: var(--surface);
+    background: var(--bg);
 }
 
 .code-container {
@@ -1718,7 +1718,7 @@ nav.scrolled {
 /* Stats Section */
 .stats-section {
     padding: 100px 5%;
-    background: var(--bg-warm);
+    background: var(--bg);
     text-align: center;
 }
 
@@ -1752,7 +1752,7 @@ nav.scrolled {
 .cta-section {
     padding: 160px 5%;
     text-align: center;
-    background: linear-gradient(135deg, var(--bg-warm) 0%, var(--bg) 100%);
+    background: var(--bg);
 }
 
 .cta-title {

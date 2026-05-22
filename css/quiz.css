@@ -2,8 +2,8 @@
 
 .quiz-hero {
     padding: 140px 5% 60px;
-    background: linear-gradient(135deg, var(--brown) 0%, #3d3226 100%);
-    color: var(--bg);
+    background: var(--bg);
+    color: var(--text);
     text-align: center;
 }
 
@@ -62,7 +62,7 @@
 /* Quiz Section */
 .quiz-section {
     padding: 60px 5% 100px;
-    background: var(--bg-warm);
+    background: var(--bg);
     min-height: 600px;
 }
 
